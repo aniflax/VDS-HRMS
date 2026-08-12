@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDS HRMS — Sevak User Manual</title>
+    <style>
+        :root {
+            --primary: #d66a18;
+            --primary-light: #f0a56c;
+            --primary-dark: #b55710;
+            --primary-bg: #fdf5ee;
+            --secondary: #1a1a2e;
+            --accent: #e8f4f8;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --bg: #ffffff;
+            --bg-alt: #f7fafc;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --info: #3182ce;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg-alt);
+            font-size: 16px;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #d66a18 0%, #e88a3c 30%, #f0a56c 60%, #fdf5ee 100%);
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .cover-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            padding: 60px 80px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .cover-logo {
+            margin-bottom: 30px;
+        }
+
+        .cover-logo img {
+            height: 100px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        .cover-title {
+            font-size: 2.8em;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .cover-title span {
+            color: var(--primary);
+        }
+
+        .cover-subtitle {
+            font-size: 1.3em;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .cover-org {
+            font-size: 1.1em;
+            color: var(--primary-dark);
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.95em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(214,106,24,0.3);
+        }
+
+        .cover-date {
+            margin-top: 24px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+            margin: 24px auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .toc h2 {
+            font-size: 1.6em;
+            color: var(--secondary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toc h2::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .toc-list {
+            list-style: none;
+            columns: 2;
+            column-gap: 40px;
+        }
+
+        .toc-list li {
+            break-inside: avoid;
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .toc-list a:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .toc-list a .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Section Styles */
+        .section {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            page-break-inside: avoid;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--primary-bg);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.5em;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .section-header .section-num {
+            font-size: 0.7em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 1.15em;
+            color: var(--secondary);
+            margin: 28px 0 12px;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.02em;
+            color: var(--primary-dark);
+            margin: 20px 0 8px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 14px;
+            color: var(--text);
+        }
+
+        /* Screenshot */
+        .screenshot-wrapper {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border);
+        }
+
+        .screenshot-caption {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Steps */
+        .steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 14px 16px 14px 56px;
+            margin-bottom: 10px;
+            background: var(--bg-alt);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 14px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: var(--bg-alt);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(214,106,24,0.1);
+        }
+
+        .feature-card .icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .feature-card h4 {
+            margin: 0 0 6px;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* Info/Tip/Warning Boxes */
+        .box {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .box .box-icon {
+            font-size: 1.3em;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .box-content {
+            flex: 1;
+        }
+
+        .box-content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .box.tip {
+            background: #f0faf4;
+            border: 1px solid #c6f6d5;
+            color: #276749;
+        }
+
+        .box.warning {
+            background: #fffff0;
+            border: 1px solid #fefcbf;
+            color: #744210;
+        }
+
+        .box.info {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+            color: #2a4365;
+        }
+
+        .box.important {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #742a2a;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.92em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child {
+            border-radius: var(--radius-sm) 0 0 0;
+        }
+
+        th:last-child {
+            border-radius: 0 var(--radius-sm) 0 0;
+        }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) {
+            background: var(--bg-alt);
+        }
+
+        tr:hover {
+            background: var(--primary-bg);
+        }
+
+        /* Inline Code */
+        code {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        /* Lists */
+        ul, ol {
+            padding-left: 24px;
+            margin: 10px 0;
+        }
+
+        li {
+            margin-bottom: 6px;
+        }
+
+        /* Progress Indicator */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 24px 0;
+            padding: 20px;
+            background: var(--bg-alt);
+            border-radius: var(--radius-sm);
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step .dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            font-size: 0.85em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step .label {
+            font-size: 0.82em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 55%;
+            width: 90%;
+            height: 2px;
+            background: var(--primary-light);
+            z-index: 0;
+        }
+
+        .progress-step:not(:first-child)::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 55%;
+            width: 90%;
+            height: 2px;
+            background: var(--primary-light);
+            z-index: 0;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px 20px;
+            background: var(--bg-alt);
+            font-weight: 600;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: default;
+        }
+
+        .faq-question .q-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* Need Help Section */
+        .help-section {
+            background: linear-gradient(135deg, var(--secondary) 0%, #16213e 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 48px 40px;
+            text-align: center;
+            margin: 40px 0 20px;
+        }
+
+        .help-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .help-section p {
+            color: #cbd5e0;
+            font-size: 1.05em;
+            max-width: 600px;
+            margin: 0 auto 10px;
+        }
+
+        .help-section .help-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 16px;
+            font-size: 0.95em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-light);
+            font-size: 0.85em;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .footer .org {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                font-size: 11pt;
+            }
+
+            .cover-page {
+                min-height: auto;
+                padding: 60px 20px;
+                background: white !important;
+                page-break-after: always;
+            }
+
+            .cover-page::before {
+                display: none;
+            }
+
+            .cover-content {
+                box-shadow: none;
+                border: 2px solid var(--primary);
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .help-section {
+                background: var(--secondary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .screenshot {
+                max-width: 80%;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cover-content {
+                padding: 40px 30px;
+            }
+
+            .cover-title {
+                font-size: 2em;
+            }
+
+            .toc-list {
+                columns: 1;
+            }
+
+            .section {
+                padding: 24px 20px;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-step::after,
+            .progress-step::before {
+                display: none;
+            }
+
+            th, td {
+                padding: 8px 12px;
+                font-size: 0.88em;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Selection color */
+        ::selection {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        /* Subtle animation on section enter */
+        .section {
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.sevak {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        @media (max-width: 600px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .color-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- COVER PAGE                                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="cover-page">
+    <div class="cover-content">
+        <div class="cover-logo">
+            <img src="vds-aol-transparent.webp" alt="VDS AOL">
+        </div>
+        <div class="cover-title">VDS HRMS &mdash; <span>Sevak</span> User Manual</div>
+        <div class="cover-subtitle">Vaidic Dharma Sansthan</div>
+        <div class="cover-org">Art of Living</div>
+        <div class="cover-divider"></div>
+        <div class="cover-badge">Sevak Edition</div>
+        <div class="cover-date">Version 1.0 &bull; July 2026</div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TABLE OF CONTENTS                           -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="container">
+
+<div class="toc" id="toc">
+    <h2>Table of Contents</h2>
+    <ol class="toc-list">
+        <li><a href="#getting-started"><span class="num">1</span> Getting Started</a></li>
+        <li><a href="#dashboard"><span class="num">2</span> Dashboard</a></li>
+        <li><a href="#my-profile"><span class="num">3</span> My Profile</a></li>
+        <li><a href="#attendance"><span class="num">4</span> Attendance</a></li>
+        <li><a href="#leaves"><span class="num">5</span> Leaves</a></li>
+        <li><a href="#weekoff-swap"><span class="num">6</span> Week-Off Swap</a></li>
+        <li><a href="#logout"><span class="num">7</span> Logout</a></li>
+        <li><a href="#faq"><span class="num">8</span> Frequently Asked Questions</a></li>
+        <li><a href="#need-help"><span class="num">9</span> Need Help?</a></li>
+    </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 1. GETTING STARTED                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="getting-started">
+    <div class="section-header">
+        <div class="section-icon">&#128640;</div>
+        <div>
+            <div class="section-num">Chapter 1</div>
+            <h2>Getting Started</h2>
+        </div>
+    </div>
+
+    <p>Welcome to <strong>VDS HRMS</strong> &mdash; your all-in-one Human Resource Management System, designed exclusively for the Vaidic Dharma Sansthan family. This manual will guide you through every feature available to you as a <span class="tag sevak">Sevak</span>, helping you make the most of the application from day one.</p>
+
+    <h3>1.1 &ensp; Self-Registration via Onboarding</h3>
+    <p>Your journey begins with self-registration. When your account is being set up, you&rsquo;ll receive a link to the Onboarding page where you can complete your registration independently.</p>
+
+    <ol class="steps">
+        <li>Navigate to the <strong>Onboarding page</strong> using the link provided by your Admin or HR.</li>
+        <li>Fill in your personal details &mdash; full name, email address, phone number, and department.</li>
+        <li>Create a secure password that you&rsquo;ll use for all future logins.</li>
+        <li>Submit the form. Your information is securely saved and your account is created.</li>
+    </ol>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Onboarding page (self-registration).PNG" alt="Onboarding page — Self-Registration" class="screenshot">
+        <div class="screenshot-caption">The Onboarding page where you complete your self-registration</div>
+    </div>
+
+    <h3>1.2 &ensp; Account Activation via Email</h3>
+    <p>After successful registration, an <strong>activation email</strong> is sent to the email address you provided. Open the email and click the activation link to verify your account. This step ensures your identity and activates your HRMS profile.</p>
+
+    <div class="box tip">
+        <span class="box-icon">&#128161;</span>
+        <div class="box-content">
+            <strong>Tip</strong>
+            If you don&rsquo;t see the activation email in your inbox, check your <strong>Spam</strong> or <strong>Junk</strong> folder. The email is sent from the VDS HRMS system automatically.
+        </div>
+    </div>
+
+    <h3>1.3 &ensp; First Login</h3>
+    <p>After clicking the activation link in your email, you may be <strong>automatically signed in</strong> and taken directly to your Dashboard. This is normal &mdash; the system recognizes you from the activation and skips the login step.</p>
+
+    <p>If you happen to log out or close the browser before completing your first session, you can always return to the login page and sign in manually with your email and password.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Login page with logo.PNG" alt="Login page with VDS logo" class="screenshot">
+        <div class="screenshot-caption">The VDS HRMS login screen</div>
+    </div>
+
+    <div class="box info">
+        <span class="box-icon">&#9432;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            If your account is locked after multiple failed login attempts, contact your <strong>Admin</strong> to unlock it and reset your password.
+        </div>
+    </div>
+
+    <h3>1.4 &ensp; Changing Your Password</h3>
+    <p>For security, it&rsquo;s a good practice to change your password periodically. You can do this anytime from the sidebar.</p>
+
+    <ol class="steps">
+        <li>Click the <strong>dropdown arrow</strong> next to your name in the sidebar.</li>
+        <li>Select <strong>Change Password</strong>.</li>
+        <li>Enter your current password, then your new password.</li>
+        <li>Click <strong>Update</strong> to save the changes.</li>
+    </ol>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Security Reminder</strong>
+            Choose a strong password with a mix of uppercase, lowercase, numbers, and special characters. Avoid using easily guessable information like your name or date of birth.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 2. DASHBOARD                                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="dashboard">
+    <div class="section-header">
+        <div class="section-icon">&#127968;</div>
+        <div>
+            <div class="section-num">Chapter 2</div>
+            <h2>Dashboard</h2>
+        </div>
+    </div>
+
+    <p>Your Dashboard is the first thing you see after logging in. It provides a warm, personalized overview of your day and keeps you connected with the VDS community.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Dashboard (showing Gurudev's Wisdom).PNG" alt="Dashboard showing Gurudev's Wisdom" class="screenshot">
+        <div class="screenshot-caption">Your personalized Dashboard with Gurudev&rsquo;s Wisdom</div>
+    </div>
+
+    <h3>2.1 &ensp; Personalized Greeting</h3>
+    <p>The Dashboard greets you based on the <strong>time of day</strong> &mdash; Good Morning, Good Afternoon, or Good Evening &mdash; making your experience feel personal and welcoming.</p>
+
+    <h3>2.2 &ensp; Gurudev&rsquo;s Wisdom</h3>
+    <p>A highlight of the Dashboard is <strong>Gurudev&rsquo;s Wisdom</strong> &mdash; a daily inspirational quote from <em>Gurudev Sri Sri Ravishankar</em>. A fresh quote appears each day, offering a thoughtful reminder to start your day with intention.</p>
+
+    <div class="box tip">
+        <span class="box-icon">&#127775;</span>
+        <div class="box-content">
+            <strong>Did You Know?</strong>
+            The quote you see today will be different from tomorrow&rsquo;s. Each day carries its own unique message from Gurudev &mdash; a new source of inspiration with every login.
+        </div>
+    </div>
+
+    <h3>2.3 &ensp; Today&rsquo;s Highlights</h3>
+    <p>The Dashboard keeps you informed about important events happening today within your team or department:</p>
+    <ul>
+        <li><strong>Upcoming Leaves</strong> &mdash; Know who&rsquo;s on leave today or in the coming days to plan your work accordingly.</li>
+    </ul>
+
+    <h3>2.4 &ensp; Quick Stats</h3>
+    <p>At a glance, the Dashboard displays key information about your profile:</p>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128100;</div>
+            <h4>Your Role</h4>
+            <p>Your current designation and role within the organization.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128196;</div>
+            <h4>Sevak ID</h4>
+            <p>Your unique Sevak identification number assigned by HR.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128197;</div>
+            <h4>Department</h4>
+            <p>The department or team you belong to.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 3. MY PROFILE                               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="my-profile">
+    <div class="section-header">
+        <div class="section-icon">&#128100;</div>
+        <div>
+            <div class="section-num">Chapter 3</div>
+            <h2>My Profile</h2>
+        </div>
+    </div>
+
+    <p>The <strong>My Profile</strong> section is your personal hub where you can view and manage your information, upload important documents, and keep your profile up to date.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/My Profile page.PNG" alt="My Profile page" class="screenshot">
+        <div class="screenshot-caption">The My Profile page &mdash; your personal information at a glance</div>
+    </div>
+
+    <h3>3.1 &ensp; View &amp; Edit Personal Details</h3>
+    <p>You can view and update the following personal information:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Field</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Full Name</strong></td>
+                <td>Your official name as registered with VDS</td>
+            </tr>
+            <tr>
+                <td><strong>Phone Number</strong></td>
+                <td>Your contact number for official communication</td>
+            </tr>
+            <tr>
+                <td><strong>Address</strong></td>
+                <td>Your current residential address</td>
+            </tr>
+            <tr>
+                <td><strong>Email</strong></td>
+                <td>Your registered email address (read-only after registration)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <p>To update your details, click the <strong>Edit</strong> button, make your changes, and save. Some fields may require HR approval before changes take effect.</p>
+
+    <h3>3.2 &ensp; Default Week-Off Day</h3>
+    <p>Your profile displays your <strong>default week-off day</strong> (e.g., Sunday). This is the day you&rsquo;re regularly off each week. If you need to change this, contact <strong>HR</strong> (or <strong>Admin</strong> if HR is not available).</p>
+
+    <h3>3.3 &ensp; Upload Documents</h3>
+    <p>You can securely upload and manage important documents directly from your profile:</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128196;</div>
+            <h4>ID Proof</h4>
+            <p>Upload a copy of your government-issued ID (Aadhaar, Passport, etc.)</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128196;</div>
+            <h4>PAN Card</h4>
+            <p>Upload your PAN card for tax and payroll processing</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128196;</div>
+            <h4>Bank Passbook</h4>
+            <p>Upload your bank passbook or statement for salary crediting</p>
+        </div>
+    </div>
+
+    <div class="box info">
+        <span class="box-icon">&#128274;</span>
+        <div class="box-content">
+            <strong>Privacy &amp; Security</strong>
+            All uploaded documents are stored securely. Your HOD has view access to your documents, while HR and Admin have full access for management purposes. Your data is handled with the utmost confidentiality.
+            <br><br>
+            If you need to update or re-upload any document (such as a renewed ID proof or updated PAN card), please contact <strong>HR</strong> (or <strong>Admin</strong> if HR is not available).
+        </div>
+    </div>
+
+    <h3>3.4 &ensp; Email Verification Status</h3>
+    <p>Your profile shows whether your email address has been <strong>verified</strong>. A verified email ensures you receive all important notifications, leave approvals, and system alerts. If your email is not yet verified, check your inbox for the verification link.</p>
+
+    <div class="box important">
+        <span class="box-icon">&#10071;</span>
+        <div class="box-content">
+            <strong>Important</strong>
+            Always provide a <strong>correct and verified email address</strong> when updating your profile. If you change your email to an incorrect or inaccessible address, you may <strong>permanently lose access to your account and data</strong> with no way to restore it. Double-check before saving any email changes.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 4. ATTENDANCE                               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="attendance">
+    <div class="section-header">
+        <div class="section-icon">&#9200;</div>
+        <div>
+            <div class="section-num">Chapter 4</div>
+            <h2>Attendance</h2>
+        </div>
+    </div>
+
+    <p>VDS HRMS uses <strong>geolocation-based attendance</strong> to ensure accurate and transparent tracking. Your attendance is validated against your allocated office, giving you confidence that your presence is recorded fairly.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Attendance page (with geo check-in).PNG" alt="Attendance page with geo check-in" class="screenshot">
+        <div class="screenshot-caption">The Attendance page with geolocation-based check-in</div>
+    </div>
+
+    <h3>4.1 &ensp; Geolocation-Based Check-In</h3>
+    <p>When you arrive at the office, you can check in using your device&rsquo;s GPS:</p>
+
+    <ol class="steps">
+        <li>Open the <strong>Attendance</strong> page from the sidebar.</li>
+        <li>Click the <strong>Check In</strong> button. The system will request access to your browser&rsquo;s GPS.</li>
+        <li>Allow location access when prompted by your browser.</li>
+        <li>The system verifies your location against the registered office coordinates.</li>
+        <li>If you&rsquo;re within the designated office area, your check-in is <strong>successfully recorded</strong>.</li>
+    </ol>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Important</strong>
+            Ensure you are at your allocated office and that location services are enabled in your browser before checking in. Your attendance location is verified against your assigned office.
+        </div>
+    </div>
+
+    <h3>4.2 &ensp; Monthly Calendar View</h3>
+    <p>The Attendance page features a <strong>visual monthly calendar</strong> that gives you a complete overview of your attendance history. Each day is color-coded to indicate your status:</p>
+
+    <div class="two-col">
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #38a169;"></span>Present</h4>
+            <p>Days you successfully checked in and out.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #e53e3e;"></span>Absent</h4>
+            <p>Days with no attendance record.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #d69e2e;"></span>Approved Leave</h4>
+            <p>Days where your leave has been fully approved.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #718096;"></span>Week-Off</h4>
+            <p>Your regular weekly off-day (e.g., Sunday).</p>
+        </div>
+    </div>
+
+    <h3>4.4 &ensp; Real-Time Attendance Sync</h3>
+    <p>Your attendance data is <strong>synced in real time</strong> with the HRMS database. This means:</p>
+    <ul>
+        <li>Your check-in time is recorded instantly.</li>
+        <li>Your attendance history is always up to date across all devices.</li>
+        <li>HR and your HOD can see your attendance status in real time.</li>
+    </ul>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Attendance page.PNG" alt="Attendance page — Monthly view" class="screenshot">
+        <div class="screenshot-caption">Monthly attendance calendar view with color-coded status</div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 5. LEAVES                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="leaves">
+    <div class="section-header">
+        <div class="section-icon">&#128197;</div>
+        <div>
+            <div class="section-num">Chapter 5</div>
+            <h2>Leaves</h2>
+        </div>
+    </div>
+
+    <p>The <strong>Leaves</strong> module is your complete leave management hub. From applying for leaves to tracking their approval status, everything you need is organized into four convenient tabs.</p>
+
+    <!-- Tab 1: Request Leave -->
+    <h3>5.1 &ensp; Request Leave Tab</h3>
+    <p>This is where you apply for leave. The process is simple and intuitive.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Request Leave tab.PNG" alt="Leaves — Request Leave tab" class="screenshot">
+        <div class="screenshot-caption">The Request Leave tab &mdash; apply for leave in just a few steps</div>
+    </div>
+
+    <h4>How to Apply for Leave</h4>
+    <ol class="steps">
+        <li>Navigate to <strong>Leaves</strong> &rarr; <strong>Request Leave</strong> tab.</li>
+        <li>Select the <strong>Leave Type</strong> from the dropdown (Sick, Casual, Earned, etc.).</li>
+        <li>Choose your leave duration: <strong>Full Day</strong> or <strong>Half Day</strong>.</li>
+        <li>If Half Day, select <strong>First Half</strong> or <strong>Second Half</strong>.</li>
+        <li>Pick the <strong>start date</strong> and <strong>end date</strong> (for multi-day leaves).</li>
+        <li>Enter a <strong>reason</strong> for your leave in the text area.</li>
+        <li>Click <strong>Submit</strong> to send your request for approval.</li>
+    </ol>
+
+    <div class="box info">
+        <span class="box-icon">&#9432;</span>
+        <div class="box-content">
+            <strong>Leave Types Available</strong>
+            The leave types available to you will be configured by HR as per your organization&rsquo;s policy. The available types will appear in the dropdown when you apply.
+        </div>
+    </div>
+
+    <!-- Tab 2: Leave Balance -->
+    <h3>5.2 &ensp; Leave Balance Tab</h3>
+    <p>Keep track of your leave entitlements at a glance. The Leave Balance tab provides a clear breakdown of your leave quota.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Leave Balance tab.PNG" alt="Leaves — Leave Balance tab" class="screenshot">
+        <div class="screenshot-caption">View your leave consumption &mdash; Used days against Allocated days for each leave type</div>
+    </div>
+
+    <h4>Understanding the Leave Balance Table</h4>
+    <p>Each row in the Leave Balance table represents a leave type available to you. The columns show your leave consumption &mdash; how many days you&rsquo;ve used out of the total allocated.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Column</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Leave Type</strong></td>
+                <td>The category of leave (e.g., Sick, Casual, Earned)</td>
+            </tr>
+            <tr>
+                <td><strong>Allocated</strong></td>
+                <td>Total number of days allocated for the year</td>
+            </tr>
+            <tr>
+                <td><strong>Used</strong></td>
+                <td>Number of days you have already utilized</td>
+            </tr>
+            <tr>
+                <td><strong>Available</strong></td>
+                <td>Remaining days you can still apply for (Allocated &minus; Used)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Tab 3: My Requests -->
+    <h3>5.3 &ensp; My Requests Tab</h3>
+    <p>Track the status of all your leave requests in one place. The My Requests tab gives you complete visibility into the approval process.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — My Requests tab (with progress bar).PNG" alt="Leaves — My Requests tab with progress bar" class="screenshot">
+        <div class="screenshot-caption">Track your leave requests with the visual progress bar</div>
+    </div>
+
+    <h4>Approval Workflow</h4>
+    <p>Every leave request follows a two-step approval process:</p>
+
+    <div class="progress-steps">
+        <div class="progress-step">
+            <div class="dot">1</div>
+            <div class="label">Applied</div>
+        </div>
+        <div class="progress-step">
+            <div class="dot">2</div>
+            <div class="label">HOD Approval</div>
+        </div>
+        <div class="progress-step">
+            <div class="dot">3</div>
+            <div class="label">HR Approval</div>
+        </div>
+    </div>
+
+    <ul>
+        <li><strong>Applied</strong> &mdash; Your request has been submitted and is awaiting review.</li>
+        <li><strong>HOD Approval</strong> &mdash; Your Head of Department has reviewed and approved the request.</li>
+        <li><strong>HR Approval</strong> &mdash; HR has given final approval. Your leave is now confirmed.</li>
+    </ul>
+
+    <p>Click any request row to view its <strong>full details</strong>, including timestamps, approver comments, and rejection reasons (if any).</p>
+
+    <div class="box tip">
+        <span class="box-icon">&#128172;</span>
+        <div class="box-content">
+            <strong>Need a Reminder?</strong>
+            If your request has been pending for a while, you can reach out to your <strong>HOD</strong> (or <strong>HR</strong> if it has reached HR) directly to request a review.
+        </div>
+    </div>
+
+    <!-- Tab 4: Calendar History -->
+    <h3>5.4 &ensp; Calendar History Tab</h3>
+    <p>The Calendar History tab provides a <strong>visual, color-coded month view</strong> of all your leaves and week-offs. It&rsquo;s a quick way to see your leave patterns over time.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Calendar History tab.PNG" alt="Leaves — Calendar History tab" class="screenshot">
+        <div class="screenshot-caption">Color-coded calendar showing leaves and week-offs at a glance</div>
+    </div>
+
+    <div class="box tip">
+        <span class="box-icon">&#128270;</span>
+        <div class="box-content">
+            <strong>Clickable Calendar Cells</strong>
+            Each calendar cell is clickable. Clicking on a day with a leave request will take you directly to that request in the <strong>My Requests</strong> tab, where you can view its full details.
+        </div>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #38a169;"></span>Approved Leave</h4>
+            <p>Leaves that have been fully approved by HOD and HR.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #d69e2e;"></span>Pending Leave</h4>
+            <p>Leaves that are awaiting approval.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #718096;"></span>Week-Off</h4>
+            <p>Your regular or swapped weekly off-day.</p>
+        </div>
+        <div class="feature-card">
+            <h4><span class="color-dot" style="background: #e53e3e;"></span>Rejected / Cancelled</h4>
+            <p>Leaves that were rejected or cancelled.</p>
+        </div>
+    </div>
+
+    <!-- Leave Request Detail Popup -->
+    <h3>5.5 &ensp; Leave Request Detail Popup</h3>
+    <p>Clicking any leave request opens a detailed popup with complete information about that request.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Leave Request Detail popup.PNG" alt="Leave Request Detail popup" class="screenshot">
+        <div class="screenshot-caption">Detailed view of a leave request &mdash; dates, approvers, timestamps, and comments</div>
+    </div>
+
+    <p>The popup displays:</p>
+    <ul>
+        <li><strong>Leave Type</strong> &mdash; The category of leave applied for</li>
+        <li><strong>Leave Dates</strong> &mdash; Start and end dates of the leave</li>
+        <li><strong>Duration</strong> &mdash; Full day or half day (with First/Second Half indicator)</li>
+        <li><strong>Reason</strong> &mdash; The reason you provided when applying</li>
+        <li><strong>Approver Names</strong> &mdash; Who reviewed your request at each stage</li>
+        <li><strong>Timestamps</strong> &mdash; When the request was applied, approved, or rejected</li>
+    </ul>
+
+    <!-- Cancel Request -->
+    <h3>5.6 &ensp; Cancel a Leave Request</h3>
+    <p>Plans change, and VDS HRMS lets you cancel a pending leave request if needed.</p>
+
+    <ol class="steps">
+        <li>Go to the <strong>My Requests</strong> tab.</li>
+        <li>Click the request you want to cancel to open the detail popup.</li>
+        <li>If the request is still <strong>Pending</strong>, you&rsquo;ll see a <strong>Cancel Request</strong> button.</li>
+        <li>Click <strong>Cancel Request</strong> and confirm your decision.</li>
+    </ol>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            You can only cancel requests that are in <strong>Pending</strong> status. Once a request is approved by your HOD or HR, it cannot be revoked from the system. In such cases, please contact your HOD or HR directly.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 6. WEEK-OFF SWAP                            -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="weekoff-swap">
+    <div class="section-header">
+        <div class="section-icon">&#128260;</div>
+        <div>
+            <div class="section-num">Chapter 6</div>
+            <h2>Week-Off Swap</h2>
+        </div>
+    </div>
+
+    <p>One of the most useful features in VDS HRMS is the <strong>Week-Off Swap</strong>. It gives you the flexibility to swap your regular weekly off-day with a working day &mdash; perfect when you need a specific day off that isn&rsquo;t your usual week-off.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Week-Off Swap dialog.PNG" alt="Week-Off Swap dialog" class="screenshot">
+        <div class="screenshot-caption">The Week-Off Swap dialog &mdash; swap your off-day with a working day</div>
+    </div>
+
+    <h3>6.1 &ensp; How It Works</h3>
+    <p>Let&rsquo;s say your default week-off is <strong>Sunday</strong>, but you need <strong>Tuesday</strong> off next week. With Week-Off Swap, you can swap Sunday for Tuesday &mdash; working on Sunday and taking Tuesday off instead.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128197;</div>
+            <h4>Default Week-Off</h4>
+            <p>View your current default week-off day (e.g., Sunday) as set in your profile.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128274;</div>
+            <h4>Swap Window</h4>
+            <p>The system shows you when the swap window is open &mdash; the period during which you can request a swap.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#9989;</div>
+            <h4>Apply for Swap</h4>
+            <p>Select the working day you want as your new off-day and submit the swap request.</p>
+        </div>
+    </div>
+
+    <h3>6.2 &ensp; Applying for a Week-Off Swap</h3>
+    <ol class="steps">
+        <li>Navigate to the <strong>Week-Off Swap</strong> section from the sidebar.</li>
+        <li>View your <strong>current default week-off day</strong> and the <strong>swap window</strong> dates.</li>
+        <li>Select the <strong>date</strong> you want to swap your week-off to.</li>
+        <li>Review the details and click <strong>Apply</strong>.</li>
+        <li>Your request is sent to your <strong>HOD for approval</strong>.</li>
+    </ol>
+
+    <h3>6.3 &ensp; Conflict Detection</h3>
+    <p>The system is smart about preventing scheduling conflicts. If you already have a <strong>leave request</strong> on the date you&rsquo;re trying to swap to, you&rsquo;ll receive a <strong>warning</strong>.</p>
+
+    <div class="box important">
+        <span class="box-icon">&#10060;</span>
+        <div class="box-content">
+            <strong>Conflict Detected!</strong>
+            You have an existing leave on [date]. You have two options:
+            <ul style="margin-top: 8px;">
+                <li><strong>Cancel the conflicting leave</strong> to proceed with the swap.</li>
+                <li><strong>Choose a different date</strong> for your swap.</li>
+            </ul>
+        </div>
+    </div>
+
+    <h3>6.4 &ensp; Swap Status Tracking</h3>
+    <p>Once you&rsquo;ve applied for a swap, you can track its status:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Meaning</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong style="color: var(--success);">Available</strong></td>
+                <td>You haven&rsquo;t applied for a swap yet. The swap option is open.</td>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--warning);">Swap Applied</strong></td>
+                <td>Your swap request has been submitted and is awaiting HOD and HR approval.</td>
+            </tr>
+            <tr>
+                <td><strong style="color: var(--info);">Swap Consumed</strong></td>
+                <td>The swap has been approved and the off-day change has been applied.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Reminder</strong>
+            Your <strong>HOD and HR must both approve the swap</strong> before the swap date. Apply well in advance to ensure timely approval.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 7. LOGOUT                                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="logout">
+    <div class="section-header">
+        <div class="section-icon">&#128682;</div>
+        <div>
+            <div class="section-num">Chapter 7</div>
+            <h2>Logout</h2>
+        </div>
+    </div>
+
+    <p>When you&rsquo;re done for the day, logging out ensures your account remains secure.</p>
+
+    <ol class="steps">
+        <li>Click the <strong>dropdown arrow</strong> next to your name in the sidebar.</li>
+        <li>Select <strong>Logout</strong>.</li>
+        <li>You&rsquo;ll be redirected to the <strong>login page</strong>.</li>
+    </ol>
+
+    <div class="box tip">
+        <span class="box-icon">&#128274;</span>
+        <div class="box-content">
+            <strong>Security Best Practice</strong>
+            Always log out when you&rsquo;re using a shared or public computer. For added security, close the browser tab after logging out.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 8. FAQ                                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="faq">
+    <div class="section-header">
+        <div class="section-icon">&#10067;</div>
+        <div>
+            <div class="section-num">Chapter 8</div>
+            <h2>Frequently Asked Questions</h2>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">1</span>
+            How do I change my default week-off day?
+        </div>
+        <div class="faq-answer">
+            Contact your <strong>HR</strong> (or <strong>Admin</strong> if HR is not available) to modify your default week-off. This cannot be changed from the Sevak portal directly.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">2</span>
+            My account is locked due to multiple failed login attempts. What do I do?
+        </div>
+        <div class="faq-answer">
+            Contact your <strong>Admin</strong> to unlock your account and reset your password. For security reasons, locked accounts can only be unlocked by authorized personnel.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">3</span>
+            How do I apply for a half-day leave?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Leaves</strong> &rarr; <strong>Request Leave</strong> tab. Select <strong>&ldquo;Half Day&rdquo;</strong> and choose either <strong>First Half</strong> or <strong>Second Half</strong> from the options.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">4</span>
+            Can I cancel my leave request after applying?
+        </div>
+        <div class="faq-answer">
+            You can cancel your request from the <strong>My Requests</strong> tab, but <strong>only while it is still Pending</strong>. Once your request has been approved by both your HOD and HR, it cannot be cancelled through the system. In that case, please contact your HOD or HR directly.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">5</span>
+            How does the system know my attendance location?
+        </div>
+        <div class="faq-answer">
+            Your browser&rsquo;s <strong>GPS</strong> is used to verify you are within the office premises. Ensure location access is enabled in your browser settings when checking in.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">6</span>
+            How do I upload my documents?
+        </div>
+        <div class="faq-answer">
+            During onboarding, you can upload your <strong>ID proof</strong>, <strong>PAN card</strong>, and <strong>bank passbook</strong> in the documents section. All uploads are encrypted and stored securely. If you need to update or re-upload any document after onboarding, please contact <strong>HR</strong> (or <strong>Admin</strong> if HR is not available).
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">7</span>
+            What is a Week-Off Swap?
+        </div>
+        <div class="faq-answer">
+            A Week-Off Swap lets you swap your regular weekly off-day with another working day. For example, if your default off is Sunday but you need Tuesday off, you can swap them. Your <strong>HOD must approve</strong> the swap first, followed by <strong>HR approval</strong>, before the swap date takes effect.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">8</span>
+            Who can see my leave requests?
+        </div>
+        <div class="faq-answer">
+            Your <strong>HOD</strong> can see and approve/reject your requests. <strong>HR</strong> and <strong>Admin</strong> can also view them for organizational visibility and record-keeping.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">9</span>
+            How do I view my leave balance?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Leaves</strong> &rarr; <strong>Leave Balance</strong> tab. You&rsquo;ll see <strong>allocated</strong>, <strong>used</strong>, and <strong>available</strong> days for each leave type in a clear table.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">10</span>
+            I applied for leave but haven&rsquo;t heard back. What should I do?
+        </div>
+        <div class="faq-answer">
+            Your request is likely awaiting <strong>HOD approval</strong>. You can reach out to your HOD directly to request a review. If it has already been approved by HOD and is pending with HR, contact your HR team.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 9. NEED HELP?                               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="help-section" id="need-help">
+    <h2>Need Help?</h2>
+    <p>We&rsquo;re here to support you every step of the way. If you have questions, face any issues, or need assistance with any feature, don&rsquo;t hesitate to reach out.</p>
+    <p>Contact your <strong>HR team</strong> or <strong>Admin</strong> for personalized support. They&rsquo;ll be happy to help you navigate the system and resolve any concerns.</p>
+    <div class="help-badge">We&rsquo;re always happy to help &#10084;</div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2026 <span class="org">Vaidic Dharma Sansthan</span> &bull; Art of Living</p>
+    <p>VDS HRMS &mdash; Sevak User Manual &bull; Version 1.0 &bull; July 2026</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">&#8593;</button>
+
+</body>
+</html>

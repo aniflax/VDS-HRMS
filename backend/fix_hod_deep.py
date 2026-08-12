@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+"""
+Deep fix for orphaned HOD records and broken department references.
+This handles:
+1. Sevaks with role=HOD but no department_id
+2. Departments pointing to non-existent or mismatched HODs
+3. Ensures data consistency
+"""
+import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+os.environ['DATABASE_URL'] = 'postgresql://postgres:13MayGovinda@localhost:5432/vds_hrms'
+
+try:
+    from sqlalchemy import create_engine, and_, or_
+    from sqlalchemy.orm import sessionmaker
+    from app.models.sevak import Sevak, RoleEnum
+    from app.models.department import Department
+
+    DATABASE_URL = os.getenv('DATABASE_URL')
+    engine = create_engine(DATABASE_URL)
+    SessionLocal = sessionmaker(bind=engine)
+    db = SessionLocal()
+
+    print("[STARTING] Deep HOD data consistency fix...\n")
+
+    # STEP 1: Find and list all problematic sevaks
+    print("[STEP 1] Finding orphaned HODs (role=HOD but no department_id)...")
+    orphaned_hods = db.query(Sevak).filter(
+        and_(
+            Sevak.role == RoleEnum.HOD,
+            or_(Sevak.department_id == None, Sevak.department_id == '')
+        )
+    ).all()
+
+    if orphaned_hods:
+        print(f"  Found {len(orphaned_hods)} orphaned HOD(s):")
+        for sevak in orphaned_hods:
+            print(f"    - Sevak {sevak.sevak_id}: {sevak.first_name} {sevak.last_name}")
+    else:
+        print("  No orphaned HODs found")
+
+    # STEP 2: Find departments that reference non-existent or orphaned HODs
+    print("\n[STEP 2] Finding departments with broken HOD references...")
+    all_depts = db.query(Department).filter(Department.hod_id != None).all()
+    broken_depts = []
+
+    for dept in all_depts:
+        hod = db.query(Sevak).filter(Sevak.id == dept.hod_id).first()
+        if not hod:
+            print(f"  [BROKEN] Dept '{dept.name}' points to non-existent HOD {dept.hod_id}")
+            broken_depts.append((dept, None))
+        elif hod.department_id != dept.id:
+            print(f"  [MISMATCH] Dept '{dept.name}' has HOD {hod.sevak_id} but they're assigned to {hod.department_id}")
+            broken_depts.append((dept, hod))
+
+    # STEP 3: Fix orphaned HODs
+    print(f"\n[STEP 3] Fixing {len(orphaned_hods)} orphaned HOD(s)...")
+    for sevak in orphaned_hods:
+        sevak.role = RoleEnum.SEVAK
+        sevak.department_id = None
+        db.add(sevak)
+        print(f"  Fixed: Sevak {sevak.sevak_id} downgraded to SEVAK")
+
+    # STEP 4: Fix departments with broken HOD references
+    print(f"\n[STEP 4] Fixing {len(broken_depts)} department(s) with broken references...")
+    for dept, hod in broken_depts:
+        dept.hod_id = None
+        db.add(dept)
+        print(f"  Fixed: Department '{dept.name}' HOD reference cleared")
+
+    db.commit()
+    print("\n[SUCCESS] All fixes applied!")
+
+    # STEP 5: Verify consistency
+    print("\n[VERIFICATION] Checking data consistency...")
+    remaining_orphans = db.query(Sevak).filter(
+        and_(
+            Sevak.role == RoleEnum.HOD,
+            or_(Sevak.department_id == None, Sevak.department_id == '')
+        )
+    ).count()
+
+    all_hods = db.query(Sevak).filter(Sevak.role == RoleEnum.HOD).all()
+    print(f"  Total HODs: {len(all_hods)}")
+    print(f"  Orphaned HODs: {remaining_orphans}")
+
+    if remaining_orphans == 0:
+        print("\n[OK] Data is now consistent!")
+    else:
+        print(f"\n[WARNING] Still {remaining_orphans} orphaned HOD(s) found!")
+
+    db.close()
+
+except Exception as e:
+    print(f"[ERROR] {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)

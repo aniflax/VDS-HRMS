@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDS HRMS — Admin User Manual</title>
+    <style>
+        :root {
+            --primary: #d66a18;
+            --primary-light: #f0a56c;
+            --primary-dark: #b55710;
+            --primary-bg: #fdf5ee;
+            --secondary: #1a1a2e;
+            --accent: #e8f4f8;
+            --text: #2d3748;
+            --text-light: #718096;
+            --border: #e2e8f0;
+            --bg: #ffffff;
+            --bg-alt: #f7fafc;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --info: #3182ce;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background: var(--bg-alt);
+            font-size: 16px;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(214,106,24,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(214,106,24,0.1) 0%, transparent 50%);
+            animation: coverGlow 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes coverGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(10deg); }
+        }
+
+        .cover-page > * { position: relative; z-index: 1; }
+
+        .cover-logo { height: 100px; margin-bottom: 40px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)) brightness(0) invert(1); }
+
+        .cover-title {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .cover-title span { color: var(--primary-light); }
+
+        .cover-subtitle {
+            font-size: 1.35rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(214,106,24,0.4);
+        }
+
+        .cover-version {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            margin: 25px auto;
+            border-radius: 3px;
+        }
+
+        .cover-org {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+            color: var(--text-light);
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .cover-org {
+            font-size: 1.1em;
+            color: var(--primary-dark);
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 10px 28px;
+            border-radius: 50px;
+            font-size: 0.95em;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(214,106,24,0.3);
+        }
+
+        .cover-date {
+            margin-top: 24px;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light));
+            border-radius: 2px;
+            margin: 24px auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Table of Contents */
+        .toc {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .toc h2 {
+            font-size: 1.6em;
+            color: var(--secondary);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toc h2::before {
+            content: '';
+            width: 4px;
+            height: 28px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .toc-list {
+            list-style: none;
+            columns: 2;
+            column-gap: 40px;
+        }
+
+        .toc-list li {
+            break-inside: avoid;
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.95em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .toc-list a:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        .toc-list a .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        /* Section Styles */
+        .section {
+            background: var(--bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            margin-bottom: 32px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            page-break-inside: avoid;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--primary-bg);
+        }
+
+        .section-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .section-header h2 {
+            font-size: 1.5em;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        .section-header .section-num {
+            font-size: 0.7em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 1.15em;
+            color: var(--secondary);
+            margin: 28px 0 12px;
+            font-weight: 600;
+        }
+
+        h4 {
+            font-size: 1.02em;
+            color: var(--primary-dark);
+            margin: 20px 0 8px;
+            font-weight: 600;
+        }
+
+        p { margin-bottom: 14px; color: var(--text); }
+
+        /* Screenshot */
+        .screenshot-wrapper {
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .screenshot {
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            border: 2px solid var(--border);
+        }
+
+        .screenshot-caption {
+            font-size: 0.85em;
+            color: var(--text-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* Steps */
+        .steps {
+            list-style: none;
+            counter-reset: step;
+        }
+
+        .steps li {
+            counter-increment: step;
+            position: relative;
+            padding: 14px 16px 14px 56px;
+            margin-bottom: 10px;
+            background: var(--bg-alt);
+            border-radius: var(--radius-sm);
+            border-left: 3px solid var(--primary);
+        }
+
+        .steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 16px;
+            top: 14px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85em;
+            font-weight: 700;
+        }
+
+        /* Feature Cards */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: var(--bg-alt);
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 4px 12px rgba(214,106,24,0.1);
+        }
+
+        .feature-card .icon {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .feature-card h4 {
+            margin: 0 0 6px;
+            color: var(--secondary);
+        }
+
+        .feature-card p {
+            font-size: 0.9em;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* Info/Tip/Warning Boxes */
+        .box {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .box .box-icon {
+            font-size: 1.3em;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .box-content { flex: 1; }
+
+        .box-content strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .box.tip {
+            background: #f0faf4;
+            border: 1px solid #c6f6d5;
+            color: #276749;
+        }
+
+        .box.warning {
+            background: #fffff0;
+            border: 1px solid #fefcbf;
+            color: #744210;
+        }
+
+        .box.info {
+            background: #ebf8ff;
+            border: 1px solid #bee3f8;
+            color: #2a4365;
+        }
+
+        .box.important {
+            background: #fff5f5;
+            border: 1px solid #fed7d7;
+            color: #742a2a;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 16px 0;
+            font-size: 0.95em;
+        }
+
+        th {
+            background: var(--primary);
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.92em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child { border-radius: var(--radius-sm) 0 0 0; }
+        th:last-child { border-radius: 0 var(--radius-sm) 0 0; }
+
+        td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:nth-child(even) { background: var(--bg-alt); }
+        tr:hover { background: var(--primary-bg); }
+
+        /* Inline Code */
+        code {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+        }
+
+        /* Lists */
+        ul, ol { padding-left: 24px; margin: 10px 0; }
+        li { margin-bottom: 6px; }
+
+        /* Progress Indicator */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            margin: 24px 0;
+            padding: 20px;
+            background: var(--bg-alt);
+            border-radius: var(--radius-sm);
+        }
+
+        .progress-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .progress-step .dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            font-weight: 700;
+            font-size: 0.85em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step .label {
+            font-size: 0.82em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .progress-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            left: 55%;
+            width: 90%;
+            height: 2px;
+            background: var(--primary-light);
+            z-index: 0;
+        }
+
+        .progress-step:not(:first-child)::before {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 55%;
+            width: 90%;
+            height: 2px;
+            background: var(--primary-light);
+            z-index: 0;
+        }
+
+        /* FAQ Section */
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px 20px;
+            background: var(--bg-alt);
+            font-weight: 600;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: default;
+        }
+
+        .faq-question .q-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.8em;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        /* Need Help Section */
+        .help-section {
+            background: linear-gradient(135deg, var(--secondary) 0%, #16213e 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 48px 40px;
+            text-align: center;
+            margin: 40px 0 20px;
+        }
+
+        .help-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .help-section p {
+            color: #cbd5e0;
+            font-size: 1.05em;
+            max-width: 600px;
+            margin: 0 auto 10px;
+        }
+
+        .help-section .help-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-top: 16px;
+            font-size: 0.95em;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            color: var(--text-light);
+            font-size: 0.85em;
+            border-top: 1px solid var(--border);
+            margin-top: 20px;
+        }
+
+        .footer .org {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag.admin {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+        }
+
+        .tag.sevak {
+            background: #ebf8ff;
+            color: #2a4365;
+        }
+
+        .tag.hod {
+            background: #f0faf4;
+            color: #276749;
+        }
+
+        .tag.hr {
+            background: #faf5ff;
+            color: #553c9a;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffeaa7 0%, #fdcb6e 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .color-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+
+        /* Role badge grid */
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.82em;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        .role-badge.sevak { background: #ebf8ff; color: #2a4365; }
+        .role-badge.hod { background: #f0faf4; color: #276749; }
+        .role-badge.hr { background: #faf5ff; color: #553c9a; }
+        .role-badge.admin { background: var(--primary-bg); color: var(--primary-dark); }
+
+        /* Sub-section divider */
+        .sub-divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            margin: 32px 0;
+        }
+
+        /* Permissions table */
+        .perm-yes { color: var(--success); font-weight: 600; }
+        .perm-no { color: var(--danger); font-weight: 600; }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; font-size: 11pt; }
+
+            .cover-page {
+                min-height: auto;
+                padding: 60px 20px;
+                background: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                page-break-after: always;
+            }
+
+            .cover-page::before { display: none; }
+
+            .container { padding: 20px; }
+
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                page-break-inside: avoid;
+            }
+
+            .help-section {
+                background: var(--secondary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            .screenshot { max-width: 80%; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .cover-title { font-size: 2rem; }
+            .toc-list { columns: 1; }
+            .section { padding: 24px 20px; }
+            .feature-grid { grid-template-columns: 1fr; }
+
+            .progress-steps {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-step::after,
+            .progress-step::before { display: none; }
+
+            th, td { padding: 8px 12px; font-size: 0.88em; }
+            .two-col { grid-template-columns: 1fr; }
+        }
+
+        html { scroll-behavior: smooth; }
+
+        ::selection {
+            background: var(--primary-light);
+            color: white;
+        }
+
+        .section { animation: fadeIn 0.4s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Tab-like section headers */
+        .tab-group {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            font-weight: 600;
+            font-size: 0.92em;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Action card */
+        .action-card {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--primary);
+            border-radius: var(--radius-sm);
+            padding: 16px 20px;
+            margin: 12px 0;
+        }
+
+        .action-card h4 {
+            margin: 0 0 6px;
+            color: var(--secondary);
+        }
+
+        .action-card p {
+            margin: 0;
+            font-size: 0.9em;
+            color: var(--text-light);
+        }
+
+        .inline-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+            vertical-align: middle;
+        }
+
+        .inline-tag.green { background: #f0faf4; color: #276749; }
+        .inline-tag.red { background: #fff5f5; color: #742a2a; }
+        .inline-tag.blue { background: #ebf8ff; color: #2a4365; }
+        .inline-tag.orange { background: var(--primary-bg); color: var(--primary-dark); }
+    </style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-page" id="top">
+    <img src="vds-aol-transparent.webp" alt="VDS AOL Logo" class="cover-logo">
+    <div class="cover-title">VDS HRMS &mdash; <span>Admin</span> User Manual</div>
+    <div class="cover-divider"></div>
+    <div class="cover-subtitle">Vaidic Dharma Sansthan</div>
+    <div class="cover-badge">Admin Role</div>
+    <div class="cover-version">Version 1.0 &bull; July 2026</div>
+    <div class="cover-org">Art of Living</div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="container">
+
+<div class="toc" id="toc">
+    <h2>Table of Contents</h2>
+    <ol class="toc-list">
+        <li><a href="#overview"><span class="num">1</span> Overview &amp; Role Hierarchy</a></li>
+        <li><a href="#sevak-features"><span class="num">2</span> Sevak Features (Summary)</a></li>
+        <li><a href="#hod-features"><span class="num">3</span> HOD Features (Summary)</a></li>
+        <li><a href="#hr-features"><span class="num">4</span> HR Features (Summary)</a></li>
+        <li><a href="#admin-features"><span class="num">5</span> Admin-Specific Features</a></li>
+        <li><a href="#account-mgmt"><span class="num">6</span> Account Management</a></li>
+        <li><a href="#dept-location"><span class="num">7</span> Department &amp; Location Management</a></li>
+        <li><a href="#admin-inherits"><span class="num">8</span> All HR Features (Inherited)</a></li>
+        <li><a href="#faq"><span class="num">9</span> Frequently Asked Questions</a></li>
+        <li><a href="#need-help"><span class="num">10</span> Need Help?</a></li>
+    </ol>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 1. OVERVIEW & ROLE HIERARCHY               -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="overview">
+    <div class="section-header">
+        <div class="section-icon">&#128736;</div>
+        <div>
+            <div class="section-num">Chapter 1</div>
+            <h2>Overview &amp; Role Hierarchy</h2>
+        </div>
+    </div>
+
+    <p>Welcome to the <strong>Admin User Manual</strong> for <strong>VDS HRMS</strong> &mdash; the comprehensive Human Resource Management System built exclusively for the Vaidic Dharma Sansthan family. As an <span class="tag admin">Admin</span>, you hold one of the most powerful roles in the system, with full access to manage accounts, organizational structures, and all administrative functions.</p>
+
+    <p>This manual covers <strong>everything</strong> that Sevak, HOD, and HR roles can do, <strong>plus</strong> Admin-specific features. Admin inherits the complete capabilities of every lower role, giving you end-to-end control over the HRMS platform.</p>
+
+    <h3>1.1 &ensp; Role Hierarchy</h3>
+    <p>VDS HRMS follows a clear role-based hierarchy. Each level inherits all permissions from the levels below it:</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128100;</div>
+            <h4><span class="role-badge sevak">Sevak</span></h4>
+            <p>Basic access &mdash; self-service for attendance, leaves, profile, and document uploads.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128081;</div>
+            <h4><span class="role-badge hod">HOD</span></h4>
+            <p>Team management &mdash; approve/reject leaves and swaps for department members.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128188;</div>
+            <h4><span class="role-badge hr">HR</span></h4>
+            <p>Organization-wide &mdash; leave admin, attendance reports, communications, department management.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128737;</div>
+            <h4><span class="role-badge admin">Admin</span></h4>
+            <p>Full control &mdash; account management, lock/unlock, password resets, all HR features.</p>
+        </div>
+    </div>
+
+    <div class="box info">
+        <span class="box-icon">&#9432;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            Above Admin sits the <strong>SUPER_ADMIN</strong> role, which can only be assigned by existing SUPER_ADMIN accounts. Admins cannot create or manage SUPER_ADMIN accounts.
+        </div>
+    </div>
+
+    <h3>1.2 &ensp; Admin Capabilities at a Glance</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Capability</th>
+                <th>Sevak</th>
+                <th>HOD</th>
+                <th>HR</th>
+                <th>Admin</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Self-service (profile, attendance, leaves)</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td>Approve team leaves</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td>Leave Admin &amp; Reports</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td>Manage Departments &amp; Locations</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td>Official Communication</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td><strong>Create HR / Admin Accounts</strong></td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td><strong>Lock / Unlock Accounts</strong></td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td><strong>Reset Passwords</strong></td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td><strong>Delete Accounts (Admin-level)</strong></td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+            <tr>
+                <td><strong>Delete Departments &amp; Locations</strong></td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-no">&mdash;</td>
+                <td class="perm-yes">&#10003;</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 2. SEVAK FEATURES (SUMMARY)                -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="sevak-features">
+    <div class="section-header">
+        <div class="section-icon">&#128100;</div>
+        <div>
+            <div class="section-num">Chapter 2</div>
+            <h2>Sevak Features <span style="font-size: 0.65em; color: var(--text-light); font-weight: 400;">&mdash; Brief Summary</span></h2>
+        </div>
+    </div>
+
+    <p>As an Admin, you inherit all <span class="tag sevak">Sevak</span> features. These are the core self-service capabilities available to every user in the system. For detailed instructions, refer to the <strong>Sevak User Manual</strong>.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#127968;</div>
+            <h4>Dashboard</h4>
+            <p>Personalized greeting, Gurudev&rsquo;s Wisdom quote, today&rsquo;s highlights, and quick stats about your role and department.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128100;</div>
+            <h4>My Profile</h4>
+            <p>View and edit personal details, upload documents (ID proof, PAN card, bank passbook), and manage your profile information.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#9200;</div>
+            <h4>Attendance</h4>
+            <p>Geolocation-based check-in/check-out, monthly calendar view with color-coded status, and real-time sync.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128197;</div>
+            <h4>Leaves</h4>
+            <p>Apply for leaves, view leave balance, track request status with progress bar, and manage calendar history.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128260;</div>
+            <h4>Week-Off Swap</h4>
+            <p>Swap your regular week-off with a working day. Requires HOD and HR approval.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128274;</div>
+            <h4>Security</h4>
+            <p>Change password, secure logout, email verification, and encrypted document storage.</p>
+        </div>
+    </div>
+
+    <div class="box tip">
+        <span class="box-icon">&#128214;</span>
+        <div class="box-content">
+            <strong>Cross-Reference</strong>
+            For complete details on any Sevak feature, see the <strong>Sevak User Manual</strong> &mdash; <code>Documentation/User Manuals/Sevak User Manual.html</code>.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 3. HOD FEATURES (SUMMARY)                  -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="hod-features">
+    <div class="section-header">
+        <div class="section-icon">&#128081;</div>
+        <div>
+            <div class="section-num">Chapter 3</div>
+            <h2>HOD Features <span style="font-size: 0.65em; color: var(--text-light); font-weight: 400;">&mdash; Brief Summary</span></h2>
+        </div>
+    </div>
+
+    <p>Admins inherit all <span class="tag hod">HOD</span> capabilities. As a Head of Department, you can manage your team&rsquo;s leaves, swaps, and view department-level attendance. For detailed instructions, refer to the <strong>HOD User Manual</strong>.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#9989;</div>
+            <h4>Pending Approvals</h4>
+            <p>Review and approve or reject leave requests and week-off swaps from sevaks in your department.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128202;</div>
+            <h4>Department Visibility</h4>
+            <p>View attendance and leave status for all sevaks under your department. See who&rsquo;s present, on leave, or absent.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128172;</div>
+            <h4>Approval Notifications</h4>
+            <p>Receive notifications when sevaks submit leave or swap requests. Act promptly to keep approvals moving.</p>
+        </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/HOD — Pending Approvals page.PNG" alt="HOD Pending Approvals page" class="screenshot">
+        <div class="screenshot-caption">The HOD Pending Approvals page &mdash; review and act on team requests</div>
+    </div>
+
+    <div class="box tip">
+        <span class="box-icon">&#128214;</span>
+        <div class="box-content">
+            <strong>Cross-Reference</strong>
+            For complete details on HOD features, see the <strong>HOD User Manual</strong> &mdash; <code>Documentation/User Manuals/HOD User Manual.html</code>.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 4. HR FEATURES (SUMMARY)                   -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="hr-features">
+    <div class="section-header">
+        <div class="section-icon">&#128188;</div>
+        <div>
+            <div class="section-num">Chapter 4</div>
+            <h2>HR Features <span style="font-size: 0.65em; color: var(--text-light); font-weight: 400;">&mdash; Brief Summary</span></h2>
+        </div>
+    </div>
+
+    <p>As an Admin, you have full access to all <span class="tag hr">HR</span> features. These include organization-wide leave management, attendance reporting, official communications, and organizational structure management. For detailed instructions, refer to the <strong>HR User Manual</strong>.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128203;</div>
+            <h4>Leave Admin</h4>
+            <p>View and manage all leave requests across the organization. Final approval authority for leaves.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128202;</div>
+            <h4>Attendance Reports</h4>
+            <p>Generate and export organization-wide attendance reports. Filter by department, date range, and individual sevaks.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128233;</div>
+            <h4>Official Communication</h4>
+            <p>Send bulk announcements and notifications to selected sevaks, departments, or the entire organization.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#127970;</div>
+            <h4>Departments</h4>
+            <p>Create, edit, and manage organizational departments. Assign HODs and manage department structure.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128205;</div>
+            <h4>Locations</h4>
+            <p>Manage office locations with geofence coordinates for attendance validation.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128101;</div>
+            <h4>Sevak Directory</h4>
+            <p>View and manage all sevak profiles. Edit details, modify week-offs, and manage activations.</p>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="screenshot-wrapper">
+            <img src="Screenshots/HR — Leave Admin page.PNG" alt="HR Leave Admin page" class="screenshot">
+            <div class="screenshot-caption">Leave Admin &mdash; organization-wide leave management</div>
+        </div>
+        <div class="screenshot-wrapper">
+            <img src="Screenshots/HR — Attendance Reports.PNG" alt="HR Attendance Reports" class="screenshot">
+            <div class="screenshot-caption">Attendance Reports &mdash; export and analyze data</div>
+        </div>
+    </div>
+
+    <div class="two-col">
+        <div class="screenshot-wrapper">
+            <img src="Screenshots/HR — Departments page.PNG" alt="HR Departments page" class="screenshot">
+            <div class="screenshot-caption">Departments &mdash; manage organizational structure</div>
+        </div>
+        <div class="screenshot-wrapper">
+            <img src="Screenshots/Official Communication dialog.PNG" alt="Official Communication dialog" class="screenshot">
+            <div class="screenshot-caption">Official Communication &mdash; send bulk announcements</div>
+        </div>
+    </div>
+
+    <div class="box tip">
+        <span class="box-icon">&#128214;</span>
+        <div class="box-content">
+            <strong>Cross-Reference</strong>
+            For complete details on HR features, see the <strong>HR User Manual</strong> &mdash; <code>Documentation/User Manuals/HR User Manual.html</code>.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 5. ADMIN-SPECIFIC FEATURES (INTRO)        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="admin-features">
+    <div class="section-header">
+        <div class="section-icon">&#128737;</div>
+        <div>
+            <div class="section-num">Chapter 5</div>
+            <h2>Admin-Specific Features</h2>
+        </div>
+    </div>
+
+    <p>The <span class="tag admin">Admin</span> role comes with exclusive capabilities that go beyond what Sevak, HOD, and HR can do. These features give you full control over user accounts, security, and organizational management.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128101;</div>
+            <h4>Account Management</h4>
+            <p>Create, lock, unlock, reset passwords, and delete accounts. View failed login attempts and email verification status.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128274;</div>
+            <h4>Account Security</h4>
+            <p>Only Admin can unlock locked accounts. HR does not have this capability. Track failed login attempts per account.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#9940;</div>
+            <h4>Delete Requests</h4>
+            <p>Handle sevak-submitted account delete requests. Review and approve or reject them from a dedicated tab.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#127970;</div>
+            <h4>Enhanced Org Management</h4>
+            <p>Full CRUD on departments and locations, plus the ability to delete them with safety checks.</p>
+        </div>
+    </div>
+
+    <div class="box important">
+        <span class="box-icon">&#10071;</span>
+        <div class="box-content">
+            <strong>Key Distinction: Admin vs. HR</strong>
+            While Admin inherits all HR features, there are critical differences: <strong>only Admin can unlock accounts</strong>, create HR/Admin accounts, reset passwords, and delete accounts. HR cannot perform these security-sensitive actions.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 6. ACCOUNT MANAGEMENT                      -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="account-mgmt">
+    <div class="section-header">
+        <div class="section-icon">&#128101;</div>
+        <div>
+            <div class="section-num">Chapter 6</div>
+            <h2>Account Management</h2>
+        </div>
+    </div>
+
+    <p>The <strong>Account Management</strong> module is the core of Admin-specific functionality. It provides a powerful 3-tab interface for managing all user accounts in the system.</p>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/Admin — Account Management.PNG" alt="Admin Account Management page" class="screenshot">
+        <div class="screenshot-caption">The Account Management page &mdash; your command center for user accounts</div>
+    </div>
+
+    <!-- 3-Tab Interface -->
+    <h3>6.1 &ensp; The 3-Tab Interface</h3>
+    <p>Account Management is organized into three tabs, each serving a distinct purpose:</p>
+
+    <div class="tab-group">
+        <div class="tab-item active">All Accounts</div>
+        <div class="tab-item">Locked Accounts</div>
+        <div class="tab-item">Delete Requests</div>
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#128101;</div>
+            <h4>All Accounts</h4>
+            <p>View and manage every user account in the system. Search, filter, and perform actions on any account.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128274;</div>
+            <h4>Locked Accounts</h4>
+            <p>Quickly see all accounts that have been locked due to failed login attempts. Unlock them with a single click.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128465;</div>
+            <h4>Delete Requests</h4>
+            <p>Review account deletion requests submitted by sevaks. Approve or reject each request.</p>
+        </div>
+    </div>
+
+    <!-- Add Account -->
+    <div class="sub-divider"></div>
+    <h3>6.2 &ensp; Add Account</h3>
+    <p>Admins can create new <strong>HR</strong> or <strong>Admin</strong> accounts directly. This is a secure 3-step process involving email OTP verification.</p>
+
+    <div class="progress-steps">
+        <div class="progress-step">
+            <div class="dot">1</div>
+            <div class="label">Email OTP</div>
+        </div>
+        <div class="progress-step">
+            <div class="dot">2</div>
+            <div class="label">Verify OTP</div>
+        </div>
+        <div class="progress-step">
+            <div class="dot">3</div>
+            <div class="label">Enter Details</div>
+        </div>
+    </div>
+
+    <h4>Step 1: Enter Email &amp; Request OTP</h4>
+    <ol class="steps">
+        <li>Navigate to <strong>Account Management</strong> and click <strong>&ldquo;Add Account&rdquo;</strong>.</li>
+        <li>Enter the <strong>email address</strong> for the new account.</li>
+        <li>Click <strong>&ldquo;Send OTP&rdquo;</strong>. A verification code is sent to the email address.</li>
+    </ol>
+
+    <h4>Step 2: Verify OTP</h4>
+    <ol class="steps">
+        <li>Check the email inbox for the OTP code.</li>
+        <li>Enter the OTP in the verification field.</li>
+        <li>Click <strong>&ldquo;Verify&rdquo;</strong> to confirm the email address is valid and accessible.</li>
+    </ol>
+
+    <h4>Step 3: Enter Account Details</h4>
+    <ol class="steps">
+        <li>Select the <strong>Role</strong> &mdash; choose <strong>HR</strong> or <strong>Admin</strong>.</li>
+        <li>Enter the <strong>Account ID</strong> (optional &mdash; leave blank for auto-generated).</li>
+        <li>Fill in the sevak&rsquo;s personal details (name, phone, department, etc.).</li>
+        <li>Optionally check <strong>&ldquo;Send activation invitation&rdquo;</strong> to email login credentials automatically.</li>
+        <li>Click <strong>&ldquo;Create Account&rdquo;</strong> to complete the process.</li>
+    </ol>
+
+    <div class="box tip">
+        <span class="box-icon">&#128161;</span>
+        <div class="box-content">
+            <strong>Tip</strong>
+            If you check <strong>&ldquo;Send activation invitation&rdquo;</strong>, the new user will receive an email with their login credentials and a link to activate their account. This is the recommended approach for onboarding.
+        </div>
+    </div>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Important</strong>
+            Admin can only create <strong>HR</strong> or <strong>Admin</strong> accounts. Sevak accounts are created through the onboarding process. SUPER_ADMIN accounts can only be created by another SUPER_ADMIN.
+        </div>
+    </div>
+
+    <!-- Actions per Account -->
+    <div class="sub-divider"></div>
+    <h3>6.3 &ensp; Account Actions</h3>
+    <p>For each account in the system, Admin has access to several management actions. These actions are available from the account list or detail view.</p>
+
+    <div class="action-card">
+        <h4>&#128065; &ensp; View Profile</h4>
+        <p>Open the full profile of any user to view their details, documents, and account information. Available for all roles.</p>
+    </div>
+
+    <div class="action-card" style="border-left-color: var(--danger);">
+        <h4>&#128274; &ensp; Lock Account</h4>
+        <p>Immediately restrict a user from logging in. The locked user will see &ldquo;Account Locked&rdquo; on login attempts. <strong>Cannot be used on SUPER_ADMIN accounts.</strong></p>
+    </div>
+
+    <div class="action-card" style="border-left-color: var(--success);">
+        <h4>&#128275; &ensp; Unlock Account</h4>
+        <p>Restore access to a locked account. The user can then log in with their existing password. <strong>Only Admin can unlock accounts &mdash; HR does not have this capability.</strong></p>
+    </div>
+
+    <div class="action-card" style="border-left-color: var(--info);">
+        <h4>&#128273; &ensp; Reset Password</h4>
+        <p>Send a password reset email to the user. They will receive instructions to create a new password. This is useful when a user forgets their password or for security purposes.</p>
+    </div>
+
+    <div class="action-card" style="border-left-color: var(--danger);">
+        <h4>&#128465; &ensp; Delete Account</h4>
+        <p>Permanently remove an account from the system. <strong>Only available for Admin-level accounts &mdash; cannot delete SUPER_ADMIN accounts.</strong> Sevak accounts are handled through delete requests instead.</p>
+    </div>
+
+    <!-- Failed Login Attempts -->
+    <div class="sub-divider"></div>
+    <h3>6.4 &ensp; Failed Login Attempts Tracking</h3>
+    <p>The system tracks failed login attempts for every account. This information is displayed in the account list and helps you identify:</p>
+    <ul>
+        <li><strong>Brute-force attempts</strong> &mdash; Multiple failed attempts from the same account may indicate a security concern.</li>
+        <li><strong>Account lockout triggers</strong> &mdash; Accounts are automatically locked after a configurable number of failed attempts.</li>
+        <li><strong>Last login timestamp</strong> &mdash; See when the user last successfully accessed the system.</li>
+    </ul>
+
+    <div class="box info">
+        <span class="box-icon">&#9432;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            The failed login attempts counter resets automatically when the account is unlocked or when a successful login occurs.
+        </div>
+    </div>
+
+    <!-- Last Login & Email Verification -->
+    <h3>6.5 &ensp; Account Status Indicators</h3>
+    <p>Each account in the management list displays key status information:</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Indicator</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Last Login</strong></td>
+                <td>Shows the date and time of the user&rsquo;s most recent successful login. Helps track engagement.</td>
+            </tr>
+            <tr>
+                <td><strong>Email Verified</strong></td>
+                <td>Indicates whether the user has verified their email address. Unverified emails may miss important notifications.</td>
+            </tr>
+            <tr>
+                <td><strong>Account Status</strong></td>
+                <td>Shows whether the account is Active, Locked, or Pending activation.</td>
+            </tr>
+            <tr>
+                <td><strong>Failed Attempts</strong></td>
+                <td>Number of consecutive failed login attempts. Displayed prominently when above zero.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Locked Accounts Tab -->
+    <div class="sub-divider"></div>
+    <h3>6.6 &ensp; Locked Accounts Tab</h3>
+    <p>The <strong>Locked Accounts</strong> tab provides a focused view of all accounts that are currently locked. This makes it easy to identify and resolve access issues quickly.</p>
+
+    <ol class="steps">
+        <li>Navigate to <strong>Account Management</strong> &rarr; <strong>Locked Accounts</strong> tab.</li>
+        <li>Browse the list of locked accounts. Each entry shows the user&rsquo;s name, email, and the reason for the lock.</li>
+        <li>Click <strong>&ldquo;Unlock&rdquo;</strong> next to the account you want to restore.</li>
+        <li>The account is immediately unlocked. The user can now log in with their existing password.</li>
+    </ol>
+
+    <div class="box important">
+        <span class="box-icon">&#10071;</span>
+        <div class="box-content">
+            <strong>Only Admin Can Unlock</strong>
+            This is a critical security distinction. <strong>HR accounts cannot unlock locked accounts.</strong> If an HR user needs to unlock an account, they must contact an Admin or SUPER_ADMIN.
+        </div>
+    </div>
+
+    <!-- Delete Requests Tab -->
+    <div class="sub-divider"></div>
+    <h3>6.7 &ensp; Delete Requests Tab</h3>
+    <p>When HR submits account deletion requests, they appear in the <strong>Delete Requests</strong> tab for Admin review. The "Requested By" column shows who raised the request.</p>
+
+    <ol class="steps">
+        <li>Navigate to <strong>Account Management</strong> &rarr; <strong>Delete Requests</strong> tab.</li>
+        <li>Review each request &mdash; the sevak&rsquo;s name, role, and who requested the deletion are displayed.</li>
+        <li>Click <strong>&ldquo;Revoke&rdquo;</strong> to cancel the delete request without deleting the account.</li>
+        <li>Click <strong>&ldquo;Delete Permanently&rdquo;</strong> (SuperAdmin only) to permanently delete the account.</li>
+        <li>Alternatively, click <strong>&ldquo;Profile&rdquo;</strong> to view the sevak&rsquo;s full profile before deciding.</li>
+    </ol>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Caution</strong>
+            Account deletion is <strong>permanent and irreversible</strong>. All data associated with the account &mdash; profile, documents, attendance history, leave records &mdash; will be permanently removed. Review carefully before approving. You can <strong>Revoke</strong> the request if you change your mind before deletion.
+        </div>
+    </div>
+
+    <div class="box info">
+        <span class="box-icon">&#8505;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            Activating an account (changing status from INACTIVE to ACTIVE) automatically clears any pending delete request for that account.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 7. DEPARTMENT & LOCATION MANAGEMENT        -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="dept-location">
+    <div class="section-header">
+        <div class="section-icon">&#127970;</div>
+        <div>
+            <div class="section-num">Chapter 7</div>
+            <h2>Department &amp; Location Management</h2>
+        </div>
+    </div>
+
+    <p>Admins have full CRUD (Create, Read, Update, Delete) capabilities for departments and locations &mdash; including <strong>delete operations</strong> that HR cannot perform.</p>
+
+    <h3>7.1 &ensp; Department Management</h3>
+    <p>Create, edit, and delete departments. Assign HODs and manage the organizational structure.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#10133;</div>
+            <h4>Create Department</h4>
+            <p>Add new departments with a name, optional HOD assignment, and description.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#9998;</div>
+            <h4>Edit Department</h4>
+            <p>Modify department details, change HOD assignments, or update descriptions.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128465;</div>
+            <h4>Delete Department</h4>
+            <p>Remove a department. Safety checks ensure no active sevak links exist before deletion is allowed.</p>
+        </div>
+    </div>
+
+    <div class="box warning">
+        <span class="box-icon">&#9888;</span>
+        <div class="box-content">
+            <strong>Safety Check</strong>
+            You <strong>cannot delete a department</strong> that has active sevak assignments. All sevaks must be reassigned to another department before the department can be deleted.
+        </div>
+    </div>
+
+    <h3>7.2 &ensp; Location Management</h3>
+    <p>Manage office locations used for geolocation-based attendance validation.</p>
+
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="icon">&#10133;</div>
+            <h4>Add Location</h4>
+            <p>Create new office locations with name, address, and GPS coordinates for geofencing.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#9998;</div>
+            <h4>Edit Location</h4>
+            <p>Update location details, modify GPS coordinates, or change the location name.</p>
+        </div>
+        <div class="feature-card">
+            <div class="icon">&#128465;</div>
+            <h4>Delete Location</h4>
+            <p>Remove a location. Only allowed if no active department links reference it.</p>
+        </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+        <img src="Screenshots/SuperAdmin — Locations page.PNG" alt="Locations management page" class="screenshot">
+        <div class="screenshot-caption">The Locations management page &mdash; manage office locations and geofences</div>
+    </div>
+
+    <div class="box info">
+        <span class="box-icon">&#9432;</span>
+        <div class="box-content">
+            <strong>Note</strong>
+            Admin has the same CRUD capabilities as HR for departments and locations, <strong>plus</strong> the ability to delete them. HR can create and edit but <strong>cannot delete</strong> departments or locations.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 8. ALL HR FEATURES (INHERITED)             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="admin-inherits">
+    <div class="section-header">
+        <div class="section-icon">&#128279;</div>
+        <div>
+            <div class="section-num">Chapter 8</div>
+            <h2>All HR Features (Inherited)</h2>
+        </div>
+    </div>
+
+    <p>As an Admin, you have <strong>complete access</strong> to every feature available to the HR role. Below is a quick reference of all inherited HR capabilities. For detailed usage instructions, refer to the <strong>HR User Manual</strong>.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Description</th>
+                <th>Manual Reference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Leave Admin</strong></td>
+                <td>Final approval authority for all leave requests across the organization. View, approve, or reject any leave.</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 3</span></td>
+            </tr>
+            <tr>
+                <td><strong>Attendance Reports</strong></td>
+                <td>Generate, filter, and export attendance reports by department, date range, or individual sevak.</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 4</span></td>
+            </tr>
+            <tr>
+                <td><strong>Official Communication</strong></td>
+                <td>Send announcements and notifications to selected sevaks, departments, or the entire organization.</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 5</span></td>
+            </tr>
+            <tr>
+                <td><strong>Department Management</strong></td>
+                <td>Create and edit departments, assign HODs. Admin can also delete (see Chapter 7).</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 6</span></td>
+            </tr>
+            <tr>
+                <td><strong>Location Management</strong></td>
+                <td>Create and edit office locations with geofence data. Admin can also delete (see Chapter 7).</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 6</span></td>
+            </tr>
+            <tr>
+                <td><strong>Sevak Directory</strong></td>
+                <td>View all sevak profiles, edit details, manage document uploads, and modify week-off days.</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 2</span></td>
+            </tr>
+            <tr>
+                <td><strong>Activation &amp; Onboarding</strong></td>
+                <td>Activate sevak accounts, modify leave balances during onboarding (once per sevak), and set default week-offs.</td>
+                <td><span class="inline-tag blue">HR Manual &mdash; Ch. 2</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="box tip">
+        <span class="box-icon">&#128161;</span>
+        <div class="box-content">
+            <strong>Pro Tip</strong>
+            Since Admin inherits everything HR can do, you may find it helpful to keep the <strong>HR User Manual</strong> alongside this manual for detailed step-by-step instructions on HR-specific workflows.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 9. FAQ                                     -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="section" id="faq">
+    <div class="section-header">
+        <div class="section-icon">&#10067;</div>
+        <div>
+            <div class="section-num">Chapter 9</div>
+            <h2>Frequently Asked Questions</h2>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">1</span>
+            How do I unlock a locked account?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Account Management</strong> &rarr; <strong>Locked Accounts</strong> tab. Find the account and click <strong>&ldquo;Unlock&rdquo;</strong>. The sevak can then log in with their existing password. <strong>Note: Only Admin can unlock accounts &mdash; HR does not have this access.</strong>
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">2</span>
+            How do I create a new HR account?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Account Management</strong> &rarr; click <strong>&ldquo;Add Account&rdquo;</strong>. Enter the email, verify via OTP, then select role as <strong>&ldquo;HR&rdquo;</strong> and fill in the details. You can optionally send an activation invitation with login credentials.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">3</span>
+            Can I delete a SUPER_ADMIN account?
+        </div>
+        <div class="faq-answer">
+            <strong>No.</strong> SUPER_ADMIN accounts can only be managed by another SUPER_ADMIN. Admins cannot lock, unlock, reset passwords for, or delete SUPER_ADMIN accounts.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">4</span>
+            How do I reset someone&rsquo;s password?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Account Management</strong>, find the account, and click <strong>&ldquo;Reset Password&rdquo;</strong>. An email with reset instructions will be sent to the user&rsquo;s registered email address.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">5</span>
+            What happens when I lock an account?
+        </div>
+        <div class="faq-answer">
+            The user <strong>cannot log in</strong> until an Admin or SUPER_ADMIN unlocks it. They will see &ldquo;Account Locked&rdquo; on login attempts. All existing sessions are also terminated. The account remains locked until you or another Admin explicitly unlocks it.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">6</span>
+            How do I handle delete requests from sevaks?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Account Management</strong> &rarr; <strong>Delete Requests</strong> tab. Review each request carefully &mdash; check the sevak&rsquo;s name and who requested the deletion. Click <strong>&ldquo;Revoke&rdquo;</strong> to cancel the request, or <strong>&ldquo;Delete Permanently&rdquo;</strong> (SuperAdmin only) to permanently delete the account. Activating an account automatically clears its delete request.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">7</span>
+            Can I modify leave balances?
+        </div>
+        <div class="faq-answer">
+            <strong>Yes, but only during onboarding</strong> (activation day), and <strong>only once per sevak</strong>. This is an HR/Admin capability used to set initial leave balances when a new sevak joins the organization.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">8</span>
+            How do I change a sevak&rsquo;s default week-off?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Sevak Directory</strong> &rarr; find the sevak &rarr; <strong>Edit Profile</strong> &rarr; modify the default week-off day. This change takes effect immediately for future attendance calculations.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">9</span>
+            My own account got locked. What do I do?
+        </div>
+        <div class="faq-answer">
+            Contact <strong>another Admin</strong> or <strong>SUPER_ADMIN</strong> to unlock your account. You cannot unlock your own account for security reasons.
+        </div>
+    </div>
+
+    <div class="faq-item">
+        <div class="faq-question">
+            <span class="q-num">10</span>
+            How do I send a bulk communication?
+        </div>
+        <div class="faq-answer">
+            Go to <strong>Sevak Directory</strong> &rarr; click <strong>&ldquo;Official Communication&rdquo;</strong> &rarr; select recipients (individual sevaks, entire departments, or all sevaks) &rarr; compose your message &rarr; click <strong>&ldquo;Send&rdquo;</strong>. All selected recipients will receive the notification.
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- 10. NEED HELP?                             -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="help-section" id="need-help">
+    <h2>Need Help?</h2>
+    <p>We&rsquo;re here to support you every step of the way. If you have questions, face any issues, or need assistance with any feature, don&rsquo;t hesitate to reach out.</p>
+    <p>For Admin-specific issues &mdash; such as account lockouts, permission escalations, or system configuration questions &mdash; contact your <strong>SUPER_ADMIN</strong>. They have the highest level of access and can assist with any administrative concern.</p>
+    <div class="help-badge">We&rsquo;re always happy to help &#10084;</div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <p>&copy; 2026 <span class="org">Vaidic Dharma Sansthan</span> &bull; Art of Living</p>
+    <p>VDS HRMS &mdash; Admin User Manual &bull; Version 1.0 &bull; July 2026</p>
+</div>
+
+</div><!-- /container -->
+
+<!-- Back to Top Button -->
+<button class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to Top">&#8593;</button>
+
+</body>
+</html>

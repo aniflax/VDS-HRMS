@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VDS HRMS — HOD User Manual</title>
+  <style>
+    :root {
+      --primary: #d66a18;
+      --primary-light: #f4a855;
+      --primary-dark: #b55815;
+      --primary-bg: #fdf5ed;
+      --primary-bg-alt: #fef9f3;
+      --text: #2c2c2c;
+      --text-secondary: #5a5a5a;
+      --text-muted: #8a8a8a;
+      --bg: #ffffff;
+      --bg-alt: #f8f9fa;
+      --bg-warm: #fffaf5;
+      --border: #e8e8e8;
+      --border-light: #f0f0f0;
+      --success: #2e7d32;
+      --success-bg: #e8f5e9;
+      --warning: #ed6c02;
+      --warning-bg: #fff3e0;
+      --info: #0277bd;
+      --info-bg: #e1f5fe;
+      --danger: #c62828;
+      --danger-bg: #fce4ec;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+      color: var(--text);
+      background: var(--bg-alt);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ========== COVER PAGE ========== */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(214,106,24,0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(214,106,24,0.1) 0%, transparent 40%);
+      animation: coverGlow 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes coverGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-2%, -1%) scale(1.02); }
+    }
+
+    .cover > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-logo {
+      height: 80px;
+      margin-bottom: 2rem;
+      filter: brightness(0) invert(1);
+      opacity: 0.9;
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: rgba(214,106,24,0.2);
+      border: 1px solid rgba(214,106,24,0.4);
+      color: var(--primary-light);
+      padding: 0.4rem 1.4rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .cover h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+
+    .cover h1 span {
+      color: var(--primary-light);
+    }
+
+    .cover-subtitle {
+      font-size: 1.25rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 0.5rem;
+      font-weight: 300;
+    }
+
+    .cover-org {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 3rem;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .cover-meta-item {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+
+    .cover-meta-item .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 0.3rem;
+    }
+
+    .cover-meta-item .value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .cover-arrow {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255,255,255,0.3);
+      font-size: 1.5rem;
+      animation: bounce 2s infinite;
+      z-index: 1;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ========== MAIN CONTENT ========== */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* ========== TABLE OF CONTENTS ========== */
+    .toc-section {
+      padding: 4rem 0 3rem;
+    }
+
+    .toc-card {
+      background: var(--bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      padding: 3rem;
+      border: 1px solid var(--border-light);
+    }
+
+    .toc-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .toc-title::before {
+      content: '';
+      width: 4px;
+      height: 28px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .toc-list {
+      list-style: none;
+    }
+
+    .toc-list li {
+      margin-bottom: 0.25rem;
+    }
+
+    .toc-list a {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.65rem 1rem;
+      color: var(--text);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .toc-list a:hover {
+      background: var(--primary-bg);
+      color: var(--primary);
+    }
+
+    .toc-list .toc-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--bg-alt);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .toc-list a:hover .toc-num {
+      background: var(--primary);
+      color: white;
+    }
+
+    .toc-list .toc-sub {
+      padding-left: 2.5rem;
+    }
+
+    .toc-list .toc-sub a {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+    }
+
+    .toc-list .toc-sub .toc-num {
+      width: 22px;
+      height: 22px;
+      font-size: 0.7rem;
+    }
+
+    .toc-divider {
+      border: none;
+      border-top: 1px solid var(--border-light);
+      margin: 1rem 0;
+    }
+
+    .toc-section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      padding: 0.5rem 1rem;
+      margin-top: 0.5rem;
+    }
+
+    /* ========== SECTIONS ========== */
+    .section {
+      padding: 3rem 0;
+    }
+
+    .section + .section {
+      border-top: 1px solid var(--border-light);
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-header h2 .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius-md);
+      background: var(--primary-bg);
+      color: var(--primary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-left: calc(42px + 0.75rem);
+    }
+
+    .section-header .section-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      margin-left: calc(42px + 0.75rem);
+    }
+
+    /* ========== FEATURE CARDS ========== */
+    .feature-card {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      transition: box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-card h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    /* ========== STEP LIST ========== */
+    .step-list {
+      counter-reset: steps;
+      list-style: none;
+      margin: 1rem 0;
+    }
+
+    .step-list li {
+      counter-increment: steps;
+      position: relative;
+      padding: 0.75rem 0 0.75rem 3.5rem;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+    }
+
+    .step-list li::before {
+      content: counter(steps);
+      position: absolute;
+      left: 0;
+      top: 0.75rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .step-list li::after {
+      content: '';
+      position: absolute;
+      left: 13px;
+      top: 3rem;
+      bottom: -0.5rem;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .step-list li:last-child::after {
+      display: none;
+    }
+
+    /* ========== BULLET LIST ========== */
+    .bullet-list {
+      list-style: none;
+      margin: 0.75rem 0;
+    }
+
+    .bullet-list li {
+      position: relative;
+      padding: 0.4rem 0 0.4rem 1.5rem;
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.85rem;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    /* ========== CALLOUT BOXES ========== */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+    }
+
+    .callout-icon {
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .callout-content {
+      flex: 1;
+    }
+
+    .callout-content strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .callout-content p {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .callout-tip {
+      background: var(--info-bg);
+      border: 1px solid #b3e5fc;
+    }
+
+    .callout-tip .callout-icon { color: var(--info); }
+    .callout-tip strong { color: var(--info); }
+
+    .callout-warning {
+      background: var(--warning-bg);
+      border: 1px solid #ffe0b2;
+    }
+
+    .callout-warning .callout-icon { color: var(--warning); }
+    .callout-warning strong { color: var(--warning); }
+
+    .callout-success {
+      background: var(--success-bg);
+      border: 1px solid #c8e6c9;
+    }
+
+    .callout-success .callout-icon { color: var(--success); }
+    .callout-success strong { color: var(--success); }
+
+    .callout-danger {
+      background: var(--danger-bg);
+      border: 1px solid #f8bbd0;
+    }
+
+    .callout-danger .callout-icon { color: var(--danger); }
+    .callout-danger strong { color: var(--danger); }
+
+    /* ========== INFO BOX ========== */
+    .info-box {
+      background: var(--primary-bg-alt);
+      border: 1px solid #f0d9c0;
+      border-left: 4px solid var(--primary);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+    }
+
+    .info-box strong {
+      color: var(--primary-dark);
+      font-size: 0.9rem;
+    }
+
+    .info-box p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.25rem;
+    }
+
+    /* ========== SCREENSHOT ========== */
+    .screenshot-wrapper {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .screenshot {
+      max-width: 100%;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+    }
+
+    .screenshot-caption {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      font-style: italic;
+    }
+
+    /* ========== TABLE ========== */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .data-table thead th {
+      background: var(--bg-alt);
+      padding: 0.75rem 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text);
+      border-bottom: 2px solid var(--border);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .data-table tbody td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--primary-bg);
+    }
+
+    /* ========== FAQ ========== */
+    .faq-item {
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border-light);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.25rem 1.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+
+    .faq-question:hover {
+      background: var(--primary-bg);
+    }
+
+    .faq-question .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .faq-answer {
+      padding: 0 1.5rem 1.25rem 4.25rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.65;
+    }
+
+    .faq-answer code {
+      background: var(--bg-alt);
+      padding: 0.15rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.85rem;
+      color: var(--primary-dark);
+    }
+
+    /* ========== HIGHLIGHT BOX ========== */
+    .highlight-box {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin: 2rem 0;
+      text-align: center;
+    }
+
+    .highlight-box h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .highlight-box p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    /* ========== NEED HELP ========== */
+    .help-section {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      margin: 2rem 0 4rem;
+      text-align: center;
+    }
+
+    .help-section h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .help-section p {
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 2rem;
+      font-size: 1rem;
+    }
+
+    .help-contacts {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .help-contact-card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-md);
+      padding: 1.5rem 2rem;
+      min-width: 200px;
+    }
+
+    .help-contact-card .role {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--primary-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .help-contact-card .name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .help-contact-card .desc {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: 0.25rem;
+    }
+
+    /* ========== FOOTER ========== */
+    .footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border-light);
+      margin-top: 2rem;
+    }
+
+    .footer strong {
+      color: var(--text-secondary);
+    }
+
+    /* ========== PRINT ========== */
+    @media print {
+      .cover {
+        min-height: auto;
+        padding: 4rem 2rem;
+        break-after: page;
+      }
+      .cover::before, .cover-arrow { display: none; }
+      body { background: white; }
+      .feature-card, .faq-item, .toc-card { box-shadow: none; border: 1px solid #ddd; }
+      .section { break-inside: avoid; }
+      .help-section { background: #333; }
+      .screenshot { box-shadow: none; border: 1px solid #ccc; }
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 768px) {
+      .cover h1 { font-size: 2rem; }
+      .cover-meta { flex-direction: column; gap: 1rem; }
+      .toc-card { padding: 2rem 1.5rem; }
+      .container { padding: 0 1rem; }
+      .section-header h2 { font-size: 1.4rem; }
+      .section-header p, .section-header .section-num { margin-left: 0; }
+      .help-contacts { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- COVER PAGE -->
+<!-- ============================================================ -->
+<section class="cover" id="top">
+  <img src="vds-aol-transparent.webp" alt="VDS AOL" class="cover-logo">
+  <div class="cover-badge">User Manual</div>
+  <h1>VDS HRMS &mdash; <span>HOD</span> Manual</h1>
+  <p class="cover-subtitle">Head of Department Role</p>
+  <p class="cover-org">Vaidic Dharma Sansthan (Art of Living)</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <div class="label">Version</div>
+      <div class="value">July 2026</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Applies To</div>
+      <div class="value">HOD Role</div>
+    </div>
+    <div class="cover-meta-item">
+      <div class="label">Platform</div>
+      <div class="value">Web Application</div>
+    </div>
+  </div>
+  <a href="#toc" class="cover-arrow">&#8595;</a>
+</section>
+
+<!-- ============================================================ -->
+<!-- TABLE OF CONTENTS -->
+<!-- ============================================================ -->
+<div class="container">
+  <section class="toc-section" id="toc">
+    <div class="toc-card">
+      <h2 class="toc-title">Table of Contents</h2>
+
+      <p class="toc-section-label">Sevak Features (Summary)</p>
+      <ul class="toc-list">
+        <li><a href="#sevak-overview"><span class="toc-num">1</span> Sevak Features Overview</a></li>
+        <li class="toc-sub"><a href="#sevak-getting-started"><span class="toc-num">1.1</span> Getting Started &amp; Login</a></li>
+        <li class="toc-sub"><a href="#sevak-dashboard"><span class="toc-num">1.2</span> Dashboard</a></li>
+        <li class="toc-sub"><a href="#sevak-profile"><span class="toc-num">1.3</span> My Profile</a></li>
+        <li class="toc-sub"><a href="#sevak-attendance"><span class="toc-num">1.4</span> Attendance</a></li>
+        <li class="toc-sub"><a href="#sevak-leaves"><span class="toc-num">1.5</span> Leaves</a></li>
+        <li class="toc-sub"><a href="#sevak-weekoff"><span class="toc-num">1.6</span> Week-Off Swap</a></li>
+        <li class="toc-sub"><a href="#sevak-logout"><span class="toc-num">1.7</span> Logout</a></li>
+      </ul>
+
+      <hr class="toc-divider">
+
+      <p class="toc-section-label">HOD Features (Detailed)</p>
+      <ul class="toc-list">
+        <li><a href="#hod-directory"><span class="toc-num">2</span> Sevak Directory (Department View)</a></li>
+        <li><a href="#hod-leave-approvals"><span class="toc-num">3</span> Leave Approvals</a></li>
+        <li class="toc-sub"><a href="#hod-leave-pending"><span class="toc-num">3.1</span> Pending Requests</a></li>
+        <li class="toc-sub"><a href="#hod-leave-detail"><span class="toc-num">3.2</span> Leave Request Detail</a></li>
+        <li class="toc-sub"><a href="#hod-leave-tabs"><span class="toc-num">3.3</span> Tab-Based Filtering</a></li>
+        <li class="toc-sub"><a href="#hod-leave-notify"><span class="toc-num">3.4</span> Notify &amp; Follow-Up</a></li>
+        <li class="toc-sub"><a href="#hod-leave-skip"><span class="toc-num">3.5</span> HOD Skip</a></li>
+        <li><a href="#hod-weekoff-approvals"><span class="toc-num">4</span> Week-Off Swap Approvals</a></li>
+      </ul>
+
+      <hr class="toc-divider">
+
+      <ul class="toc-list">
+        <li><a href="#faq"><span class="toc-num">5</span> Frequently Asked Questions</a></li>
+        <li><a href="#help"><span class="toc-num">6</span> Need Help?</a></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1: SEVAK FEATURES (SUMMARY) -->
+  <!-- ============================================================ -->
+  <section class="section" id="sevak-overview">
+    <div class="section-header">
+      <div class="section-num">Section 1</div>
+      <h2><span class="icon">&#9881;</span> Sevak Features Overview</h2>
+      <p>As an HOD, you have full access to all Sevak features. The sections below provide a brief summary. For complete details, refer to the <strong>Sevak User Manual</strong>.</p>
+    </div>
+
+    <div class="callout callout-info callout-tip">
+      <span class="callout-icon">&#128161;</span>
+      <div class="callout-content">
+        <strong>HOD = Sevak + More</strong>
+        <p>Every feature available to a Sevak is also available to you. This section briefly covers those features. The HOD-specific features that extend beyond the Sevak role are covered in detail in Sections 2&ndash;4.</p>
+      </div>
+    </div>
+
+    <!-- 1.1 Getting Started -->
+    <div class="feature-card" id="sevak-getting-started">
+      <h4>&#128274; 1.1 Getting Started &amp; Login</h4>
+      <p>Access the VDS HRMS application through your organisation&rsquo;s login page. Enter your registered email address and password, then click <strong>Sign In</strong>. If you enter incorrect credentials three times, your account will be temporarily locked for 30 minutes. Use the <strong>Forgot Password?</strong> link to reset your password via email.</p>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/Login page with logo.PNG" alt="Login Page" class="screenshot">
+      <p class="screenshot-caption">The VDS HRMS login page</p>
+    </div>
+
+    <!-- 1.2 Dashboard -->
+    <div class="feature-card" id="sevak-dashboard">
+      <h4>&#127968; 1.2 Dashboard</h4>
+      <p>After logging in, you land on the Dashboard. It displays a daily wisdom quote from Gurudev, along with quick-access cards for attendance, leaves, and other key features. The dashboard gives you an at-a-glance summary of your activity and pending items.</p>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/Dashboard (showing Gurudev's Wisdom).PNG" alt="Dashboard" class="screenshot">
+      <p class="screenshot-caption">Dashboard with Gurudev&rsquo;s Wisdom and quick-access cards</p>
+    </div>
+
+    <!-- 1.3 My Profile -->
+    <div class="feature-card" id="sevak-profile">
+      <h4>&#128100; 1.3 My Profile</h4>
+      <p>View and manage your personal information under <strong>My Profile</strong>. This includes your name, contact details, department, designation, employment type, and default week-off. You can also update your profile picture and change your password from this page.</p>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/My Profile page.PNG" alt="My Profile" class="screenshot">
+      <p class="screenshot-caption">My Profile page with personal and employment details</p>
+    </div>
+
+    <!-- 1.4 Attendance -->
+    <div class="feature-card" id="sevak-attendance">
+      <h4>&#128197; 1.4 Attendance</h4>
+      <p>Mark your daily attendance using the <strong>Geo Check-In</strong> feature, which verifies your location. The attendance page shows your check-in and check-out times, total hours worked, and a calendar view of your monthly attendance. You can also view your attendance history and filters by date range.</p>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/Attendance page (with geo check-in).PNG" alt="Attendance with Geo Check-In" class="screenshot">
+      <p class="screenshot-caption">Attendance page with geo-based check-in and check-out</p>
+    </div>
+
+    <!-- 1.5 Leaves -->
+    <div class="feature-card" id="sevak-leaves">
+      <h4>&#128197; 1.5 Leaves</h4>
+      <p>The Leaves section has four tabs: <strong>Request Leave</strong> (apply for new leave), <strong>Leave Balance</strong> (view available leave types and balances), <strong>My Requests</strong> (track your leave request history with a visual progress bar), and <strong>Calendar History</strong> (see approved leaves on a calendar view). Each request goes through an approval workflow: Sevak &rarr; HOD &rarr; HR.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+      <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Request Leave tab.PNG" alt="Request Leave" class="screenshot">
+        <p class="screenshot-caption">Request Leave tab</p>
+      </div>
+      <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Leave Balance tab.PNG" alt="Leave Balance" class="screenshot">
+        <p class="screenshot-caption">Leave Balance tab</p>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+      <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — My Requests tab (with progress bar).PNG" alt="My Requests" class="screenshot">
+        <p class="screenshot-caption">My Requests with progress tracking</p>
+      </div>
+      <div class="screenshot-wrapper">
+        <img src="Screenshots/Leaves — Calendar History tab.PNG" alt="Calendar History" class="screenshot">
+        <p class="screenshot-caption">Calendar History view</p>
+      </div>
+    </div>
+
+    <!-- 1.6 Week-Off Swap -->
+    <div class="feature-card" id="sevak-weekoff">
+      <h4>&#128260; 1.6 Week-Off Swap</h4>
+      <p>If you need to swap your regular week-off day, you can submit a <strong>Week-Off Swap</strong> request. Select the week-off day you want to swap with, provide a reason, and submit. The request is sent to your HOD for approval. You must submit the request before the original week-off date.</p>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/Week-Off Swap dialog.PNG" alt="Week-Off Swap" class="screenshot">
+      <p class="screenshot-caption">Week-Off Swap request dialog</p>
+    </div>
+
+    <!-- 1.7 Logout -->
+    <div class="feature-card" id="sevak-logout">
+      <h4>&#128682; 1.7 Logout</h4>
+      <p>To log out, click on your profile icon in the top-right corner and select <strong>Logout</strong>. This securely ends your session and returns you to the login page. Always log out when using shared devices.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: HOD - SEVAK DIRECTORY -->
+  <!-- ============================================================ -->
+  <section class="section" id="hod-directory">
+    <div class="section-header">
+      <div class="section-num">Section 2</div>
+      <h2><span class="icon">&#128101;</span> Sevak Directory (Department View)</h2>
+      <p>As an HOD, you can view and manage all sevaks within your assigned department.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#128269; View Department Members</h4>
+      <p>The Sevak Directory gives you a complete list of all sevaks (employees) in your department. You can see their names, designations, contact details, attendance status, and leave summaries at a glance. Use the <strong>search bar</strong> to quickly find a specific sevak by name, or use the <strong>filter options</strong> to narrow results by designation, employment type, or status.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#128196; View Individual Profiles</h4>
+      <p>Click on any sevak&rsquo;s name to view their detailed profile. From their profile, you can access:</p>
+      <ul class="bullet-list">
+        <li><strong>Personal Information</strong> &mdash; Name, email, phone, date of birth, etc.</li>
+        <li><strong>Employment Details</strong> &mdash; Department, designation, employment type, date of joining</li>
+        <li><strong>Attendance Logs</strong> &mdash; Daily check-in/out records, total hours, and attendance history</li>
+        <li><strong>Leave Summary</strong> &mdash; Leave balances across all leave types and recent leave history</li>
+      </ul>
+    </div>
+
+    <div class="callout callout-warning">
+      <span class="callout-icon">&#9888;</span>
+      <div class="callout-content">
+        <strong>Department Restriction</strong>
+        <p>HODs can <strong>only</strong> view sevaks in their own assigned department. You do not have visibility into sevaks from other departments. This ensures data privacy and proper role-based access control.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#128202; Use Cases</h4>
+      <ul class="bullet-list">
+        <li><strong>Team Overview</strong> &mdash; Quickly check who is available today and who is on leave</li>
+        <li><strong>Onboarding Verification</strong> &mdash; Confirm that a new sevak&rsquo;s profile is complete</li>
+        <li><strong>Attendance Monitoring</strong> &mdash; Review attendance patterns for your department members</li>
+        <li><strong>Leave Planning</strong> &mdash; Assess team capacity before approving leave requests</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: HOD - LEAVE APPROVALS -->
+  <!-- ============================================================ -->
+  <section class="section" id="hod-leave-approvals">
+    <div class="section-header">
+      <div class="section-num">Section 3</div>
+      <h2><span class="icon">&#9989;</span> Leave Approvals</h2>
+      <p>The primary HOD responsibility: reviewing and acting on leave requests from sevaks in your department.</p>
+    </div>
+
+    <div class="callout callout-success">
+      <span class="callout-icon">&#10004;</span>
+      <div class="callout-content">
+        <strong>This is Your Key HOD Feature</strong>
+        <p>As an HOD, you are the first level of approval for leave requests from sevaks in your department. Once you approve, the request moves to HR for final approval. Your timely action ensures sevaks receive responses quickly.</p>
+      </div>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/HOD — Pending Approvals page.PNG" alt="HOD Pending Approvals" class="screenshot">
+      <p class="screenshot-caption">HOD Pending Approvals page &mdash; your main workspace for leave management</p>
+    </div>
+
+    <!-- 3.1 Pending Requests -->
+    <div class="feature-card" id="hod-leave-pending">
+      <h4>&#128203; 3.1 Pending Requests</h4>
+      <p>When you navigate to <strong>Leave Approvals</strong>, you land on the <strong>Pending</strong> tab by default. This tab shows all leave requests from your department sevaks that are awaiting your approval. Each request card displays:</p>
+      <ul class="bullet-list">
+        <li><strong>Sevak Name</strong> &mdash; Who is requesting leave</li>
+        <li><strong>Leave Type</strong> &mdash; Casual Leave, Sick Leave, Earned Leave, etc.</li>
+        <li><strong>Dates</strong> &mdash; Start and end dates of the requested leave</li>
+        <li><strong>Duration</strong> &mdash; Full day or half day (with period: first half / second half)</li>
+        <li><strong>Reason</strong> &mdash; The sevak&rsquo;s stated reason for the leave</li>
+        <li><strong>Applied On</strong> &mdash; When the request was submitted</li>
+      </ul>
+    </div>
+
+    <div class="screenshot-wrapper">
+      <img src="Screenshots/Leave Request Detail popup.PNG" alt="Leave Request Detail" class="screenshot">
+      <p class="screenshot-caption">Leave Request Detail dialog with full information and action buttons</p>
+    </div>
+
+    <!-- 3.2 Leave Request Detail -->
+    <div class="feature-card" id="hod-leave-detail">
+      <h4>&#128269; 3.2 Leave Request Detail</h4>
+      <p>Click on any pending request to open the <strong>Leave Request Detail</strong> dialog. This dialog provides the complete picture:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Requester</strong></td>
+            <td>Name and designation of the sevak</td>
+          </tr>
+          <tr>
+            <td><strong>Leave Type</strong></td>
+            <td>The category of leave (Casual, Sick, Earned, etc.)</td>
+          </tr>
+          <tr>
+            <td><strong>From &ndash; To</strong></td>
+            <td>Leave date range</td>
+          </tr>
+          <tr>
+            <td><strong>Duration</strong></td>
+            <td>Full day, First Half, or Second Half</td>
+          </tr>
+          <tr>
+            <td><strong>Reason</strong></td>
+            <td>The sevak&rsquo;s explanation for the leave</td>
+          </tr>
+          <tr>
+            <td><strong>Status</strong></td>
+            <td>Current workflow status (Pending HOD / Pending HR / Approved / Rejected)</td>
+          </tr>
+          <tr>
+            <td><strong>Progress Bar</strong></td>
+            <td>Visual indicator showing where the request is in the approval flow</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p style="margin-top: 1rem;">At the bottom of the dialog, you have three action buttons:</p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+      <div class="feature-card" style="border-left: 4px solid var(--success); text-align: center;">
+        <h4 style="color: var(--success); justify-content: center;">&#10004; Approve</h4>
+        <p>Approve the leave request with one click. The request moves to HR for final approval.</p>
+      </div>
+      <div class="feature-card" style="border-left: 4px solid var(--danger); text-align: center;">
+        <h4 style="color: var(--danger); justify-content: center;">&#10008; Reject</h4>
+        <p>Reject the request. You must provide a reason or comment explaining the rejection.</p>
+      </div>
+      <div class="feature-card" style="border-left: 4px solid var(--info); text-align: center;">
+        <h4 style="color: var(--info); justify-content: center;">&#128276; Notify</h4>
+        <p>Send an email reminder to the sevak about their pending request.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#9989; Approving a Request</h4>
+      <p>Click <strong>Approve</strong> to approve the leave. You can optionally add a comment before approving (e.g., &ldquo;Approved. Enjoy your time off!&rdquo;). Once approved, the request status changes to <strong>Pending HR</strong> and moves to HR for final approval. The sevak will be notified of your approval.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#10060; Rejecting a Request</h4>
+      <p>Click <strong>Reject</strong> to deny the leave request. You <strong>must</strong> provide a reason or comment when rejecting &mdash; this is mandatory and helps the sevak understand why their request was denied. The sevak will be notified of the rejection and can choose to reapply.</p>
+    </div>
+
+    <!-- 3.3 Tab-Based Filtering -->
+    <div class="feature-card" id="hod-leave-tabs">
+      <h4>&#128195; 3.3 Tab-Based Filtering</h4>
+      <p>The Leave Approvals page is organized into tabs for easy navigation:</p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tab</th>
+            <th>What It Shows</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Pending</strong></td>
+            <td>Requests awaiting your approval (default tab)</td>
+          </tr>
+          <tr>
+            <td><strong>Approved</strong></td>
+            <td>Requests you have already approved</td>
+          </tr>
+          <tr>
+            <td><strong>Rejected</strong></td>
+            <td>Requests you have rejected</td>
+          </tr>
+          <tr>
+            <td><strong>Cancelled</strong></td>
+            <td>Requests that were cancelled by the sevak</td>
+          </tr>
+          <tr>
+            <td><strong>All</strong></td>
+            <td>Complete history of all requests from your department</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-tip" style="margin-top: 1rem;">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-content">
+          <strong>Search &amp; Filter</strong>
+          <p>Use the search bar to find requests by sevak name. You can also filter by leave type, date range, or status to quickly locate specific requests.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.4 Notify -->
+    <div class="feature-card" id="hod-leave-notify">
+      <h4>&#128276; 3.4 Notify &amp; Follow-Up</h4>
+      <p>The <strong>Notify</strong> button is a powerful follow-up tool. When you click it, the system sends an email notification to the sevak reminding them about their pending leave request. This is useful when:</p>
+      <ul class="bullet-list">
+        <li>A sevak has submitted a request but hasn&rsquo;t provided required documentation</li>
+        <li>You need the sevak to clarify or update their reason</li>
+        <li>The request has been pending for a while and you want to nudge the sevak</li>
+      </ul>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">&#128161;</span>
+        <div class="callout-content">
+          <strong>Best Practice</strong>
+          <p>Use Notify before rejecting a request. Give the sevak a chance to clarify or update their request. This promotes a supportive and communicative work environment.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3.5 HOD Skip -->
+    <div class="feature-card" id="hod-leave-skip">
+      <h4>&#9193; 3.5 HOD Skip</h4>
+      <p>In certain situations, you may need to bypass your own approval and send a leave request directly to HR. The <strong>Skip HOD</strong> option allows you to do this. When you use this feature:</p>
+
+      <ol class="step-list">
+        <li>The leave request skips the HOD approval step entirely</li>
+        <li>The request is sent directly to HR for final approval</li>
+        <li>The request status updates to <strong>Pending HR</strong></li>
+      </ol>
+
+      <div class="callout callout-warning">
+        <span class="callout-icon">&#9888;</span>
+        <div class="callout-content">
+          <strong>When to Use HOD Skip</strong>
+          <p>Use this feature sparingly and only when truly necessary &mdash; for example, when you are going to be unavailable for an extended period and the leave request is urgent, or when you have a conflict of interest (e.g., the request is from a close family member working in your department).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4: HOD - WEEK-OFF SWAP APPROVALS -->
+  <!-- ============================================================ -->
+  <section class="section" id="hod-weekoff-approvals">
+    <div class="section-header">
+      <div class="section-num">Section 4</div>
+      <h2><span class="icon">&#128260;</span> Week-Off Swap Approvals</h2>
+      <p>Approve or reject week-off swap requests from sevaks in your department.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#128203; How It Works</h4>
+      <p>When a sevak submits a week-off swap request, it appears in your <strong>Week-Off Swap Approvals</strong> queue. You can review the request details including the original week-off day, the requested swap day, and the reason provided by the sevak.</p>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#9989; Approve or Reject</h4>
+      <p>Review the swap request and choose to <strong>Approve</strong> or <strong>Reject</strong>. If rejecting, provide a reason so the sevak understands the decision. Once approved, the sevak&rsquo;s week-off day is updated for the specified period.</p>
+    </div>
+
+    <div class="callout callout-danger">
+      <span class="callout-icon">&#9888;</span>
+      <div class="callout-content">
+        <strong>Important: Approve Before the Swap Date</strong>
+        <p>You <strong>must</strong> approve the week-off swap request <strong>before</strong> the original week-off date. If you do not approve it by then, the request <strong>auto-cancels</strong> and the sevak keeps their original week-off day. There is no way to approve an auto-cancelled request &mdash; the sevak would need to submit a new request.</p>
+      </div>
+    </div>
+
+    <div class="feature-card">
+      <h4>&#128337; Timeline Example</h4>
+      <p>Suppose a sevak&rsquo;s default week-off is <strong>Sunday</strong>, and they request to swap it to <strong>Wednesday</strong> for a specific week:</p>
+      <ul class="bullet-list">
+        <li>You must approve the swap <strong>before Sunday</strong> of that week</li>
+        <li>If approved: the sevak works on Sunday and is off on Wednesday</li>
+        <li>If not approved by Sunday: the request auto-cancels, and the sevak is off on Sunday as usual</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box">
+      <h3>Quick Reference: Approval Deadlines</h3>
+      <p>Week-off swap approvals must be completed before the original week-off date. Late approvals are not possible &mdash; the request auto-cancels. Plan ahead and review swap requests promptly.</p>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 5: FAQ -->
+  <!-- ============================================================ -->
+  <section class="section" id="faq">
+    <div class="section-header">
+      <div class="section-num">Section 5</div>
+      <h2><span class="icon">&#10067;</span> Frequently Asked Questions</h2>
+      <p>Common questions specific to the HOD role.</p>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q1</span>
+        How do I approve a leave request?
+      </button>
+      <div class="faq-answer">
+        Go to <strong>Leave Approvals</strong> from the sidebar. In the <strong>Pending</strong> tab, find the request you want to approve. Click on it to open the detail dialog, review the information, and click <strong>Approve</strong>. You can optionally add a comment before approving.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q2</span>
+        Can I approve my own leave request?
+      </button>
+      <div class="faq-answer">
+        No. Your own leave requests must be approved by <strong>HR</strong>. When you submit a leave request, it bypasses the HOD step and goes directly to HR for approval.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q3</span>
+        What does &ldquo;Notify&rdquo; do on a leave request?
+      </button>
+      <div class="faq-answer">
+        The <strong>Notify</strong> button sends an email notification to the sevak reminding them about their pending leave request. This is useful for follow-ups &mdash; for example, if you need the sevak to provide additional information or if the request has been pending for a while.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q4</span>
+        Can I see leave requests from other departments?
+      </button>
+      <div class="faq-answer">
+        No. HODs can <strong>only</strong> view leave requests from sevaks in their assigned department. You do not have visibility into other departments&rsquo; leave requests.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q5</span>
+        What happens if I don&rsquo;t approve a request before the deadline?
+      </button>
+      <div class="faq-answer">
+        The request stays <strong>pending</strong>. There is no auto-rejection for leave requests. However, you can use the <strong>Notify</strong> button to send a reminder to the sevak. For week-off swap requests, the request auto-cancels after the original week-off date.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q6</span>
+        How do I skip my approval and send directly to HR?
+      </button>
+      <div class="faq-answer">
+        In the <strong>Pending Approvals</strong> tab, open the leave request detail dialog and use the <strong>&ldquo;Skip HOD&rdquo;</strong> option. This sends the request directly to HR for approval, bypassing your approval step. Use this only when truly necessary (e.g., you are unavailable for an extended period).
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q7</span>
+        My default week-off is different from my department members. Is that okay?
+      </button>
+      <div class="faq-answer">
+        Yes. Each sevak has their own default week-off day as configured by HR. Your week-off day is independent of your department members&rsquo; week-off days.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q8</span>
+        How do I change my default week-off day?
+      </button>
+      <div class="faq-answer">
+        Contact <strong>HR or Admin</strong> to modify your default week-off day. This change cannot be made from the HOD interface.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="q-num">Q9</span>
+        My account is locked. What do I do?
+      </button>
+      <div class="faq-answer">
+        Your account may be locked after 3 consecutive failed login attempts. Contact <strong>Admin or HR</strong> to unlock your account and reset your password.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 6: NEED HELP -->
+  <!-- ============================================================ -->
+  <section class="section" id="help">
+    <div class="help-section">
+      <h3>Need Help?</h3>
+      <p>If you have questions, encounter issues, or need assistance with the VDS HRMS application, reach out to the support team.</p>
+      <div class="help-contacts">
+        <div class="help-contact-card">
+          <div class="role">For Account Issues</div>
+          <div class="name">Admin / IT Support</div>
+          <div class="desc">Locked accounts, password resets, technical issues</div>
+        </div>
+        <div class="help-contact-card">
+          <div class="role">For Policy Questions</div>
+          <div class="name">HR Department</div>
+          <div class="desc">Leave policies, week-off changes, employment queries</div>
+        </div>
+        <div class="help-contact-card">
+          <div class="role">For Feature Requests</div>
+          <div class="name">HR or Admin</div>
+          <div class="desc">Suggestions for new features or improvements</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- FOOTER -->
+  <!-- ============================================================ -->
+  <footer class="footer">
+    <p><strong>VDS HRMS</strong> &mdash; HOD User Manual</p>
+    <p>Vaidic Dharma Sansthan (Art of Living) &bull; July 2026 &bull; Version 1.0</p>
+    <p style="margin-top: 0.5rem;">This document is intended for internal use by authorised personnel only.</p>
+  </footer>
+</div>
+
+</body>
+</html>

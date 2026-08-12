@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VDS HRMS — HR User Manual</title>
+    <style>
+        :root {
+            --primary: #d66a18;
+            --primary-light: #f59e3b;
+            --primary-dark: #b55511;
+            --primary-bg: #fff7ed;
+            --primary-border: #fed7aa;
+            --text: #1c1917;
+            --text-secondary: #57534e;
+            --text-muted: #a8a29e;
+            --bg: #ffffff;
+            --bg-alt: #fafaf9;
+            --border: #e7e5e4;
+            --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.08), 0 4px 10px rgba(0,0,0,0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-xs: 6px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg-alt);
+            line-height: 1.7;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 70%, rgba(214,106,24,0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(214,106,24,0.1) 0%, transparent 50%);
+            animation: coverGlow 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes coverGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(10deg); }
+        }
+
+        .cover-page > * { position: relative; z-index: 1; }
+
+        .cover-logo { height: 100px; margin-bottom: 40px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3)) brightness(0) invert(1); }
+
+        .cover-title {
+            font-size: 3rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+        }
+
+        .cover-title span { color: var(--primary-light); }
+
+        .cover-subtitle {
+            font-size: 1.35rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 50px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(214,106,24,0.4);
+        }
+
+        .cover-version {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .cover-divider {
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            margin: 25px auto;
+            border-radius: 3px;
+        }
+
+        .cover-org {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            margin-top: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Navigation */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            z-index: 100;
+            padding: 24px 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            z-index: 99;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        @media (min-width: 901px) {
+            .sidebar-overlay {
+                display: none !important;
+            }
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+            transition: all 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: var(--primary-bg);
+            border-color: var(--primary-border);
+        }
+
+        .menu-toggle .hamburger {
+            width: 20px;
+            height: 14px;
+            position: relative;
+        }
+
+        .menu-toggle .hamburger span {
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 100%;
+            background: var(--text);
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle .hamburger span:nth-child(1) { top: 0; }
+        .menu-toggle .hamburger span:nth-child(2) { top: 6px; }
+        .menu-toggle .hamburger span:nth-child(3) { top: 12px; }
+
+        .menu-toggle.active .hamburger span:nth-child(1) {
+            transform: rotate(45deg);
+            top: 6px;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active .hamburger span:nth-child(3) {
+            transform: rotate(-45deg);
+            top: 6px;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .sidebar-header img { height: 36px; }
+
+        .sidebar-header h3 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            padding: 9px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .sidebar nav a:hover {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-left-color: var(--primary);
+        }
+
+        .sidebar nav a.section-link {
+            font-weight: 700;
+            color: var(--text);
+            margin-top: 12px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .sidebar nav a.sub-link { padding-left: 36px; font-size: 0.84rem; }
+
+        .sidebar nav a.sub-sub-link { padding-left: 52px; font-size: 0.82rem; font-weight: 400; }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            max-width: 960px;
+            padding: 40px 50px 80px;
+        }
+
+        h1 { font-size: 2rem; font-weight: 700; color: var(--text); margin: 50px 0 20px; letter-spacing: -0.3px; }
+        h2 { font-size: 1.55rem; font-weight: 700; color: var(--primary-dark); margin: 48px 0 16px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-border); }
+        h3 { font-size: 1.2rem; font-weight: 600; color: var(--text); margin: 32px 0 12px; }
+        h4 { font-size: 1.02rem; font-weight: 600; color: var(--text-secondary); margin: 24px 0 10px; }
+
+        p { margin-bottom: 14px; color: var(--text-secondary); }
+
+        /* Section Headers */
+        .section-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 28px 32px;
+            border-radius: var(--radius);
+            margin: 40px 0 28px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-header h2 {
+            color: white;
+            border: none;
+            margin: 0;
+            padding: 0;
+            font-size: 1.5rem;
+        }
+
+        .section-header p {
+            color: rgba(255,255,255,0.85);
+            margin: 6px 0 0;
+            font-size: 0.95rem;
+        }
+
+        .section-header .section-number {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            transition: box-shadow 0.2s;
+        }
+
+        .card:hover { box-shadow: var(--shadow-md); }
+
+        .card-accent {
+            border-left: 4px solid var(--primary);
+        }
+
+        .card-highlight {
+            background: var(--primary-bg);
+            border-color: var(--primary-border);
+        }
+
+        /* Feature Boxes */
+        .feature-box {
+            display: grid;
+            grid-template-columns: 48px 1fr;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin: 14px 0;
+            transition: all 0.2s;
+        }
+
+        .feature-box:hover {
+            border-color: var(--primary-border);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+        }
+
+        .feature-icon.orange { background: var(--primary-bg); color: var(--primary); }
+        .feature-icon.blue { background: #eff6ff; color: #2563eb; }
+        .feature-icon.green { background: #f0fdf4; color: #16a34a; }
+        .feature-icon.purple { background: #faf5ff; color: #9333ea; }
+        .feature-icon.red { background: #fef2f2; color: #dc2626; }
+        .feature-icon.teal { background: #f0fdfa; color: #0d9488; }
+
+        .feature-box h4 { margin: 0 0 6px; font-size: 1rem; color: var(--text); }
+        .feature-box p { margin: 0; font-size: 0.9rem; color: var(--text-secondary); }
+
+        /* Screenshot Container */
+        .screenshot-container {
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .screenshot-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+        }
+
+        .screenshot-caption {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-top: 12px;
+            font-style: italic;
+        }
+
+        /* Lists */
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; color: var(--text-secondary); font-size: 0.95rem; }
+        li strong { color: var(--text); }
+
+        /* Steps */
+        .steps { counter-reset: step-counter; list-style: none; margin-left: 0; }
+        .steps li {
+            counter-increment: step-counter;
+            padding-left: 48px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* Inline Code / Badges */
+        code {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: 'Cascadia Code', 'Fira Code', monospace;
+            border: 1px solid var(--primary-border);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-orange { background: var(--primary-bg); color: var(--primary); border: 1px solid var(--primary-border); }
+        .badge-green { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+        .badge-blue { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+        .badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+        .badge-purple { background: #faf5ff; color: #9333ea; border: 1px solid #e9d5ff; }
+
+        /* Info / Warning / Tip Boxes */
+        .info-box {
+            padding: 16px 20px;
+            border-radius: var(--radius-sm);
+            margin: 18px 0;
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .info-box.info {
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            color: #1e40af;
+        }
+
+        .info-box.warning {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            color: #92400e;
+        }
+
+        .info-box.tip {
+            background: #f0fdf4;
+            border-left: 4px solid #16a34a;
+            color: #166534;
+        }
+
+        .info-box.danger {
+            background: #fef2f2;
+            border-left: 4px solid #dc2626;
+            color: #991b1b;
+        }
+
+        .info-box strong { display: block; margin-bottom: 4px; }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin: 18px 0;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background: var(--primary-bg);
+            color: var(--primary-dark);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--primary-border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: var(--primary-bg); }
+
+        /* FAQ */
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px 20px;
+            font-weight: 600;
+            color: var(--text);
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+        }
+
+        .faq-answer {
+            padding: 16px 20px;
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            background: var(--bg-alt);
+        }
+
+        .faq-answer code { font-size: 0.85em; }
+
+        /* Divider */
+        hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 40px 0;
+        }
+
+        /* Cross Reference */
+        .cross-ref {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: var(--bg-alt);
+            border: 1px dashed var(--primary-border);
+            border-radius: var(--radius-sm);
+            margin: 14px 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .cross-ref-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-bg);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; max-width: 100%; }
+            .cover-page { page-break-after: always; min-height: auto; padding: 80px 40px; }
+            .section-header { background: var(--primary) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .feature-box, .card { break-inside: avoid; }
+            body { background: white; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar:not(.collapsed) { transform: translateX(0); }
+            .main-content { margin-left: auto; margin-right: auto; padding: 24px 20px; padding-top: 64px; }
+            .cover-title { font-size: 2rem; }
+            .menu-toggle { display: flex; }
+        }
+
+        @media (min-width: 901px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar:not(.collapsed) { transform: translateX(0); }
+            .main-content { margin-left: auto; margin-right: auto; max-width: 960px; padding: 40px 50px 80px; }
+            .menu-toggle { display: flex; }
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            z-index: 200;
+        }
+
+        .scroll-top:hover { transform: scale(1.1); }
+
+        /* Workflow diagram */
+        .workflow {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .workflow-step {
+            background: var(--primary-bg);
+            border: 1px solid var(--primary-border);
+            border-radius: var(--radius-sm);
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .workflow-arrow {
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 0 6px;
+        }
+
+        /* Key Shortcut */
+        kbd {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 0.8em;
+            font-family: monospace;
+            color: var(--text);
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            box-shadow: 0 1px 0 var(--border);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Hamburger Menu Toggle -->
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+    <div class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</button>
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ========== COVER PAGE ========== -->
+<div class="cover-page" id="top">
+    <img src="vds-aol-transparent.webp" alt="VDS AOL Logo" class="cover-logo">
+    <div class="cover-title">VDS HRMS &mdash; <span>HR User Manual</span></div>
+    <div class="cover-divider"></div>
+    <div class="cover-subtitle">Vaidic Dharma Sansthan</div>
+    <div class="cover-badge">HR Role</div>
+    <div class="cover-version">Version 1.0 &bull; July 2026</div>
+    <div class="cover-org">Art of Living</div>
+</div>
+
+<!-- ========== SIDEBAR NAVIGATION ========== -->
+<div class="sidebar collapsed">
+    <div class="sidebar-header">
+        <img src="vds-aol-transparent.webp" alt="VDS AOL">
+        <h3>HR User Manual</h3>
+    </div>
+    <nav>
+        <a href="#overview" class="section-link">Overview</a>
+        <a href="#login" class="link">Login</a>
+        <a href="#dashboard" class="link">Dashboard</a>
+
+        <a href="#sec1" class="section-link">1. Sevak &amp; HOD Features</a>
+        <a href="#sec1-profile" class="sub-link">My Profile</a>
+        <a href="#sec1-attendance" class="sub-link">Attendance</a>
+        <a href="#sec1-leaves" class="sub-link">Leaves</a>
+        <a href="#sec1-weekoff" class="sub-link">Week-Off Swap</a>
+        <a href="#sec1-hod" class="sub-link">HOD Approvals</a>
+
+        <a href="#sec2" class="section-link">2. HR-Specific Features</a>
+        <a href="#sec2-directory" class="sub-link">Sevak Directory</a>
+        <a href="#sec2-directory-tabs" class="sub-sub-link">&raquo; Directory Tabs</a>
+        <a href="#sec2-directory-actions" class="sub-sub-link">&raquo; Actions &amp; Management</a>
+        <a href="#sec2-directory-add" class="sub-sub-link">&raquo; Add New Sevak</a>
+        <a href="#sec2-directory-export" class="sub-sub-link">&raquo; CSV Export</a>
+        <a href="#sec2-directory-balances" class="sub-sub-link">&raquo; Modify Leave Balances</a>
+
+        <a href="#sec2-leaveadmin" class="sub-link">Leave Admin</a>
+        <a href="#sec2-leaveadmin-types" class="sub-sub-link">&raquo; Manage Leave Types</a>
+        <a href="#sec2-leaveadmin-workflow" class="sub-sub-link">&raquo; Approval Workflow</a>
+
+        <a href="#sec2-departments" class="sub-link">Departments</a>
+        <a href="#sec2-attendance" class="sub-link">Attendance Reports</a>
+        <a href="#sec2-comms" class="sub-link">Official Communication</a>
+        <a href="#sec2-weekoff-maint" class="sub-link">Week-Off Maintenance</a>
+
+        <a href="#faq" class="section-link">FAQ</a>
+        <a href="#help" class="section-link">Need Help?</a>
+    </nav>
+</div>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+
+<!-- Overview -->
+<section id="overview">
+    <h1>Overview</h1>
+    <p>Welcome to the <strong>VDS HRMS</strong> HR User Manual. This manual is your comprehensive guide to using the Human Resource Management System developed by <strong>Vaidic Dharma Sansthan (Art of Living)</strong>.</p>
+
+    <div class="card card-accent">
+        <h4>Your Role: HR</h4>
+        <p>As an HR user, you have full organizational visibility and administrative control. You can manage <strong>all sevaks</strong> across every department, oversee leave workflows, maintain attendance compliance, manage departments, and communicate with the entire workforce. You also have access to everything a Sevak and HOD can do.</p>
+    </div>
+
+    <h3>What You Can Do</h3>
+    <div class="feature-box">
+        <div class="feature-icon orange">👤</div>
+        <div>
+            <h4>Manage All Sevaks</h4>
+            <p>View the complete organizational directory, onboard new members, manage profiles, and handle account lifecycle.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon blue">📋</div>
+        <div>
+            <h4>Leave Administration</h4>
+            <p>Oversee all leave requests organization-wide, approve or reject leaves, manage leave types, and configure policies.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon green">📊</div>
+        <div>
+            <h4>Attendance &amp; Compliance</h4>
+            <p>Monitor attendance logs across the organization, track geo-mismatch violations, and generate compliance reports.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon purple">🏢</div>
+        <div>
+            <h4>Department Management</h4>
+            <p>Create and manage departments, assign HODs, and configure office locations for each department.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon teal">📧</div>
+        <div>
+            <h4>Bulk Communication</h4>
+            <p>Send official communications to sevaks by role, department, or location with recipient preview and acknowledgement.</p>
+        </div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Login -->
+<section id="login">
+    <h2>Login</h2>
+    <p>Access the VDS HRMS application through the login page. Enter your registered email and password to sign in. If you encounter any login issues, contact the system administrator.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/Login page with logo.PNG" alt="Login Page">
+        <div class="screenshot-caption">Login page with VDS AOL branding</div>
+    </div>
+</section>
+
+<hr>
+
+<!-- Dashboard -->
+<section id="dashboard">
+    <h2>Dashboard</h2>
+    <p>After logging in, you'll land on the Dashboard. The dashboard provides a quick overview of your pending tasks, recent activities, and daily inspiration from Gurudev's Wisdom. Key widgets include pending leave approvals, upcoming week-offs, and recent notifications.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/Dashboard (showing Gurudev's Wisdom).PNG" alt="Dashboard">
+        <div class="screenshot-caption">Dashboard with Gurudev's Wisdom and quick actions</div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================== -->
+<!-- SECTION 1: Sevak & HOD Features -->
+<!-- ============================== -->
+<div class="section-header" id="sec1">
+    <div class="section-number">Section 1</div>
+    <h2>Sevak &amp; HOD Features</h2>
+    <p>As HR, you have access to all features available to Sevaks and HODs. Below is a brief summary of each. For in-depth guidance, refer to the dedicated Sevak and HOD user manuals.</p>
+</div>
+
+<section id="sec1-profile">
+    <h3>My Profile</h3>
+    <p>View and manage your personal profile including name, email, department, designation, reporting manager, and employment details. You can update your profile picture and personal information. The profile page provides a comprehensive view of your organizational identity within VDS HRMS.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/My Profile page.PNG" alt="My Profile">
+        <div class="screenshot-caption">My Profile page showing personal and organizational details</div>
+    </div>
+    <div class="cross-ref">
+        <div class="cross-ref-icon">📖</div>
+        <div>For a complete walkthrough of profile management, see the <strong>Sevak User Manual</strong> — My Profile section.</div>
+    </div>
+</section>
+
+<section id="sec1-attendance">
+    <h3>Attendance</h3>
+    <p>Record your daily attendance using the geo-validated check-in/check-out system. The attendance page displays your daily log, working hours, and location validation status. You can check in from your designated work location using GPS validation.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/Attendance page (with geo check-in).PNG" alt="Attendance">
+        <div class="screenshot-caption">Attendance page with geo check-in and check-out functionality</div>
+    </div>
+    <div class="cross-ref">
+        <div class="cross-ref-icon">📖</div>
+        <div>For complete attendance features, see the <strong>Sevak User Manual</strong> — Attendance section.</div>
+    </div>
+</section>
+
+<section id="sec1-leaves">
+    <h3>Leaves</h3>
+    <p>Apply for leaves, track leave balances, and monitor the status of your requests. The Leaves module includes four tabs:</p>
+    <ul>
+        <li><strong>Request Leave</strong> — Apply for a new leave with type, dates, and reason</li>
+        <li><strong>Leave Balance</strong> — View current balances for each leave type</li>
+        <li><strong>My Requests</strong> — Track status of all your leave applications</li>
+        <li><strong>Calendar History</strong> — Visual calendar view of your leave history</li>
+    </ul>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+        <div class="screenshot-container">
+            <img src="Screenshots/Leaves — Request Leave tab.PNG" alt="Request Leave">
+            <div class="screenshot-caption">Request Leave tab</div>
+        </div>
+        <div class="screenshot-container">
+            <img src="Screenshots/Leaves — Leave Balance tab.PNG" alt="Leave Balance">
+            <div class="screenshot-caption">Leave Balance tab</div>
+        </div>
+        <div class="screenshot-container">
+            <img src="Screenshots/Leaves — My Requests tab.PNG" alt="My Requests">
+            <div class="screenshot-caption">My Requests tab with progress bar</div>
+        </div>
+        <div class="screenshot-container">
+            <img src="Screenshots/Leaves — Calendar History tab.PNG" alt="Calendar History">
+            <div class="screenshot-caption">Calendar History tab</div>
+        </div>
+    </div>
+    <div class="screenshot-container">
+        <img src="Screenshots/Leave Request Detail popup.PNG" alt="Leave Request Detail">
+        <div class="screenshot-caption">Leave Request Detail popup with full information</div>
+    </div>
+    <div class="cross-ref">
+        <div class="cross-ref-icon">📖</div>
+        <div>For complete leave application features, see the <strong>Sevak User Manual</strong> — Leaves section.</div>
+    </div>
+</section>
+
+<section id="sec1-weekoff">
+    <h3>Week-Off Swap</h3>
+    <p>Request a swap of your regular week-off day with another day. The system will route your request through the approval workflow (HOD → HR). You can track the status of your swap requests and view pending approvals.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/Week-Off Swap dialog.PNG" alt="Week-Off Swap">
+        <div class="screenshot-caption">Week-Off Swap dialog for requesting week-off changes</div>
+    </div>
+    <div class="cross-ref">
+        <div class="cross-ref-icon">📖</div>
+        <div>For complete week-off swap features, see the <strong>Sevak User Manual</strong> — Week-Off Swap section.</div>
+    </div>
+</section>
+
+<section id="sec1-hod">
+    <h3>HOD Pending Approvals</h3>
+    <p>As a Head of Department, you can view and act on leave requests and week-off swap requests from sevaks in your department. You can approve or reject requests with comments. Approved requests that require HR action are forwarded to the HR team.</p>
+    <div class="screenshot-container">
+        <img src="Screenshots/HOD — Pending Approvals page.PNG" alt="HOD Pending Approvals">
+        <div class="screenshot-caption">HOD Pending Approvals page for department-level approvals</div>
+    </div>
+    <div class="cross-ref">
+        <div class="cross-ref-icon">📖</div>
+        <div>For complete HOD approval features, see the <strong>HOD User Manual</strong> — Pending Approvals section.</div>
+    </div>
+</section>
+
+<hr>
+
+<!-- ============================== -->
+<!-- SECTION 2: HR-Specific Features -->
+<!-- ============================== -->
+<div class="section-header" id="sec2">
+    <div class="section-number">Section 2</div>
+    <h2>HR-Specific Features</h2>
+    <p>These features are exclusive to the HR role. They provide organization-wide visibility and administrative control over the people operations of Vaidic Dharma Sansthan.</p>
+</div>
+
+<!-- 2.1 Sevak Directory -->
+<section id="sec2-directory">
+    <h3>2.1 Sevak Directory (Full View)</h3>
+    <p>The Sevak Directory gives HR a complete, organization-wide view of all sevaks — not limited to a single department. This is the central hub for managing the entire workforce.</p>
+
+    <div class="info-box info">
+        <strong>🔑 Key Difference from HOD View</strong>
+        HODs can only see sevaks in their department. HR sees <strong>all sevaks across all departments</strong> with advanced search, filtering, and bulk actions.
+    </div>
+
+    <div id="sec2-directory-tabs">
+    <h4>Directory Tabs</h4>
+    <p>The directory is organized into three tabs for efficient management:</p>
+
+    <div class="feature-box">
+        <div class="feature-icon orange">👥</div>
+        <div>
+            <h4>All Sevaks <span class="badge badge-orange">Default</span></h4>
+            <p>View every sevak in the organization. Search by name, employee ID, email, role, or department. Filter results to find specific sevaks quickly.</p>
+        </div>
+    </div>
+
+    <div class="feature-box">
+        <div class="feature-icon green">🆕</div>
+        <div>
+            <h4>Onboardings <span class="badge badge-green">Financial Month Filter</span></h4>
+            <p>View newly registered sevaks grouped by financial month. This helps track recent joiners and ensure their onboarding is complete. Use the financial month selector to filter by specific periods.</p>
+        </div>
+    </div>
+
+    <div class="feature-box">
+        <div class="feature-icon red">⏸️</div>
+        <div>
+            <h4>Inactive &gt; 3 Months</h4>
+            <p>Identify sevaks who have been inactive for more than 3 months. Use this tab to decide whether to reactivate or archive these accounts.</p>
+        </div>
+    </div>
+    </div>
+
+    <div id="sec2-directory-actions">
+    <h4>Actions Per Sevak</h4>
+    <p>Each sevak entry in the directory provides the following actions:</p>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>View Profile</strong></td>
+                    <td>Open the sevak's full profile with personal, employment, and organizational details</td>
+                </tr>
+                <tr>
+                    <td><strong>Leave Summary</strong></td>
+                    <td>View leave balances, history, and pending requests for the sevak</td>
+                </tr>
+                <tr>
+                    <td><strong>Attendance Log</strong></td>
+                    <td>Review the sevak's attendance records including geo-validation status</td>
+                </tr>
+                <tr>
+                    <td><strong>Deactivate / Activate</strong></td>
+                    <td>Temporarily disable or re-enable a sevak's account access</td>
+                </tr>
+                <tr>
+                    <td><strong>Delete Request / Withdraw</strong></td>
+                    <td>Submit a deletion request for inactive accounts, or withdraw a pending request before Admin acts on it</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-box warning">
+        <strong>⚠️ Important</strong>
+        Deactivating a sevak revokes their login access but preserves their data. Activate anytime to restore access. You can submit a delete request for INACTIVE accounts and withdraw it anytime before Admin/SuperAdmin acts on it. Activating an account automatically clears any pending delete request.
+    </div>
+    </div>
+
+    <div id="sec2-directory-add">
+    <h4>Add New Sevak</h4>
+    <p>Invite new members to the organization directly from the Sevak Directory:</p>
+    <ol class="steps">
+        <li>Click the <strong>"Add New Sevak"</strong> button in the directory header</li>
+        <li>Enter the new sevak's <strong>email address</strong> — an invitation will be sent</li>
+        <li>Fill in required details: name, department, designation, and role</li>
+        <li>Set the initial <strong>week-off day</strong> and <strong>reporting manager</strong></li>
+        <li>Click <strong>"Send Invitation"</strong> — the sevak receives an email to complete registration</li>
+    </ol>
+
+    <div class="info-box tip">
+        <strong>💡 Tip</strong>
+        The new sevak will appear in the "Onboardings" tab until their onboarding is complete. You can track their registration status from there.
+    </div>
+    </div>
+
+    <div id="sec2-directory-export">
+    <h4>CSV Export</h4>
+    <p>Export the directory data for offline analysis or record-keeping:</p>
+    <ol class="steps">
+        <li>Apply any desired filters (department, role, status)</li>
+        <li>Click the <strong>"Export CSV"</strong> button</li>
+        <li>A CSV file will be generated with all matching records</li>
+        <li>The file includes: Name, Employee ID, Email, Department, Role, Status, Joining Date</li>
+    </ol>
+    </div>
+
+    <div id="sec2-directory-balances">
+    <h4>Modify Leave Balances</h4>
+    <p>During onboarding, HR can adjust leave allocations for a new sevak. This is a one-time action available only on the activation day.</p>
+
+    <div class="info-box danger">
+        <strong>🔒 Restriction</strong>
+        Leave balance modification is allowed <strong>only once</strong>, on the sevak's activation day. After that, balances follow the standard annual cycle. Plan adjustments carefully.
+    </div>
+
+    <ol class="steps">
+        <li>Go to <strong>Sevak Directory → Onboardings</strong> tab</li>
+        <li>Find the sevak and click <strong>"Modify Leave Balances"</strong></li>
+        <li>Adjust the balances for each leave type as needed</li>
+        <li>Click <strong>"Save"</strong> — the adjustment is recorded and the option is locked</li>
+    </ol>
+
+    <h4>Financial Month Filtering for Onboardings</h4>
+    <p>The Onboardings tab includes a <strong>financial month selector</strong> to help you track new joiners within specific periods. This is especially useful during the April onboarding rush when many new sevaks join the organization.</p>
+    </div>
+</section>
+
+<hr>
+
+<!-- 2.2 Leave Admin -->
+<section id="sec2-leaveadmin">
+    <h3>2.2 Leave Admin</h3>
+    <p>The Leave Admin module gives HR full visibility and control over leave management across the entire organization. Unlike the HOD view (limited to their department), HR can see and act on <strong>all leave requests</strong> from every department.</p>
+
+    <div class="screenshot-container">
+        <img src="Screenshots/HR — Leave Admin page.PNG" alt="Leave Admin">
+        <div class="screenshot-caption">HR Leave Admin page with organization-wide leave visibility</div>
+    </div>
+
+    <h4>Leave Admin Tabs</h4>
+    <div class="feature-box">
+        <div class="feature-icon orange">⏳</div>
+        <div>
+            <h4>Pending Requests <span class="badge badge-orange">Action Required</span></h4>
+            <p>Shows all leave requests that need attention. This tab contains two types of requests:</p>
+            <ul style="margin-top: 8px;">
+                <li><strong>PENDING</strong> — Waiting for HOD approval. Use the <strong>Notify HOD</strong> button to send email reminders.</li>
+                <li><strong>HOD_APPROVED</strong> — Already approved by HOD, ready for your (HR) action. Click <strong>Approve</strong> or <strong>Reject</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="feature-box">
+        <div class="feature-icon blue">📋</div>
+        <div>
+            <h4>All Requests</h4>
+            <p>Complete history of every leave request across the organization. Search and filter by sevak name, department, role, leave type, or status. Each request shows a visual progress bar indicating where it is in the workflow.</p>
+        </div>
+    </div>
+
+    <div class="feature-box">
+        <div class="feature-icon green">⚙️</div>
+        <div>
+            <h4>Manage Types</h4>
+            <p>Create, edit, and delete leave types (e.g., Casual Leave, Sick Leave, Earned Leave). Configure default balances, carry-forward rules, and eligibility criteria.</p>
+        </div>
+    </div>
+
+    <div id="sec2-leaveadmin-types">
+    <h4>Manage Leave Types</h4>
+    <p>Configure the leave types available to sevaks:</p>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Operation</th>
+                    <th>How</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Create</strong></td>
+                    <td>Click "Add Leave Type", fill in name, code, default balance, and rules</td>
+                    <td>New types are immediately available for selection</td>
+                </tr>
+                <tr>
+                    <td><strong>Edit</strong></td>
+                    <td>Click the edit icon on any leave type</td>
+                    <td>Changes apply to future allocations only</td>
+                </tr>
+                <tr>
+                    <td><strong>Delete</strong></td>
+                    <td>Click delete, enter admin password to confirm</td>
+                    <td>Only types with zero usage can be deleted. Password protection prevents accidental deletion.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-box warning">
+        <strong>⚠️ Password-Protected Deletion</strong>
+        Deleting a leave type requires entering the admin password. This safeguard prevents accidental deletion of leave types that may be in use.
+    </div>
+    </div>
+
+    <div id="sec2-leaveadmin-workflow">
+    <h4>Approval Workflow</h4>
+    <p>Leave requests follow a structured two-level approval process:</p>
+
+    <div class="workflow">
+        <div class="workflow-step">Sevak Applies</div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">HOD Reviews<br><small>(PENDING)</small></div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">HR Reviews<br><small>(HOD_APPROVED)</small></div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">Approved / Rejected</div>
+    </div>
+
+    <div class="info-box info">
+        <strong>📧 Notify HOD</strong>
+        If a leave request has been in <strong>PENDING</strong> status for too long, click the <strong>"Notify HOD"</strong> button to send an email reminder to the respective HOD. This helps prevent delays in the approval process.
+    </div>
+
+    <p>Each leave request in the list includes a <strong>visual progress bar</strong> showing exactly where it is in the workflow — from submission to final approval/rejection.</p>
+    </div>
+</section>
+
+<hr>
+
+<!-- 2.3 Departments -->
+<section id="sec2-departments">
+    <h3>2.3 Departments</h3>
+    <p>Manage the organizational structure by creating, editing, and deleting departments. Each department can have an assigned HOD, office locations, and a member list.</p>
+
+    <div class="screenshot-container">
+        <img src="Screenshots/HR — Departments page.PNG" alt="Departments">
+        <div class="screenshot-caption">Departments management page</div>
+    </div>
+
+    <h4>Department Management Features</h4>
+    <div class="feature-box">
+        <div class="feature-icon orange">➕</div>
+        <div>
+            <h4>Create Department</h4>
+            <p>Click "Add Department" and enter the department name. Optionally assign an HOD and office locations during creation.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon blue">✏️</div>
+        <div>
+            <h4>Edit Department</h4>
+            <p>Modify department name, reassign HOD, or update location assignments. Changes take effect immediately.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon red">🗑️</div>
+        <div>
+            <h4>Delete Department</h4>
+            <p>Remove a department that no longer exists. Only departments with no active members can be deleted.</p>
+        </div>
+    </div>
+
+    <h4>Assign HOD to Department</h4>
+    <p>When creating or editing a department, you can assign a Head of Department. Only sevaks with the <code>SEVAK</code> role are eligible for HOD assignment. The HOD will receive pending approval notifications for leave and week-off requests from their department.</p>
+
+    <h4>Office Location Assignment</h4>
+    <p>Assign one or more office locations to each department. Sevaks in that department will use the assigned location for geo-validated attendance check-in. Location assignment includes an interactive map for visual confirmation.</p>
+
+    <div class="info-box tip">
+        <strong>💡 Tip</strong>
+        Departments with no assigned HOD will have their leave requests routed directly to HR for approval. Always ensure every active department has an HOD assigned.
+    </div>
+</section>
+
+<hr>
+
+<!-- 2.4 Attendance Reports -->
+<section id="sec2-attendance">
+    <h3>2.4 Attendance Reports</h3>
+    <p>Monitor and manage attendance compliance across the entire organization. The Attendance Reports module provides comprehensive visibility into attendance logs, geo-validation, and compliance metrics.</p>
+
+    <div class="screenshot-container">
+        <img src="Screenshots/HR — Attendance Reports.PNG" alt="Attendance Reports">
+        <div class="screenshot-caption">HR Attendance Reports with compliance overview</div>
+    </div>
+
+    <h4>Key Features</h4>
+    <div class="feature-box">
+        <div class="feature-icon orange">📊</div>
+        <div>
+            <h4>Attendance Compliance</h4>
+            <p>View all attendance logs across the organization with geo-validation flags. Identify missed check-ins, late arrivals, and early departures at a glance.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon red">📍</div>
+        <div>
+            <h4>Geo-Mismatch Logs</h4>
+            <p>A dedicated view for location violations — instances where a sevak checked in from outside their designated work location. Review and take appropriate action.</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon blue">✏️</div>
+        <div>
+            <h4>Manual Attendance Update</h4>
+            <p>HR can add or edit attendance records manually to correct errors or account for exceptional situations (e.g., system outages, remote work).</p>
+        </div>
+    </div>
+    <div class="feature-box">
+        <div class="feature-icon green">🔄</div>
+        <div>
+            <h4>Real-Time Sync via SSE</h4>
+            <p>Attendance data updates in real-time using Server-Sent Events (SSE). No page refresh needed — new records appear automatically as sevaks check in/out.</p>
+        </div>
+    </div>
+
+    <h4>Monthly Compliance Report</h4>
+    <p>The report includes summary cards and a detailed breakdown:</p>
+
+    <div class="card card-highlight">
+        <h4 style="color: var(--primary-dark);">Summary Cards</h4>
+        <ul>
+            <li><strong>Total Records</strong> — Number of attendance entries for the selected period</li>
+            <li><strong>Missed Attendance</strong> — Days where sevaks did not check in</li>
+            <li><strong>Geo Mismatch</strong> — Number of location validation failures</li>
+        </ul>
+    </div>
+
+    <p>Below the summary cards, a <strong>sevak-wise breakdown table</strong> shows individual attendance records with details like check-in time, check-out time, total hours, and geo-validation status.</p>
+
+    <h4>Report Controls</h4>
+    <ul>
+        <li><strong>Month/Year Selector</strong> — Choose the reporting period</li>
+        <li><strong>Department Filter</strong> — View reports for specific departments</li>
+        <li><strong>CSV Download</strong> — Export the report for offline analysis or archival</li>
+    </ul>
+</section>
+
+<hr>
+
+<!-- 2.5 Official Communication -->
+<section id="sec2-comms">
+    <h3>2.5 Official Communication (Bulk Communication)</h3>
+    <p>Send official emails to sevaks across the organization with flexible targeting options. This feature allows HR to communicate important announcements, policy changes, or event information to specific groups or the entire workforce.</p>
+
+    <div class="screenshot-container">
+        <img src="Screenshots/Official Communication dialog.PNG" alt="Official Communication">
+        <div class="screenshot-caption">Official Communication dialog for composing bulk emails</div>
+    </div>
+
+    <div class="screenshot-container">
+        <img src="Screenshots/Official Communication dialog(from Sevak Directory).PNG" alt="Communication from Directory">
+        <div class="screenshot-caption">Accessing Official Communication from the Sevak Directory</div>
+    </div>
+
+    <h4>Targeting Modes</h4>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Mode</th>
+                    <th>Description</th>
+                    <th>Use Case</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>All Sevaks</strong></td>
+                    <td>Send to every active sevak in the organization</td>
+                    <td>Organization-wide announcements</td>
+                </tr>
+                <tr>
+                    <td><strong>By Department</strong></td>
+                    <td>Select one or more departments as recipients</td>
+                    <td>Department-specific updates</td>
+                </tr>
+                <tr>
+                    <td><strong>By Role</strong></td>
+                    <td>Multi-select roles (Sevak, HOD, HR, Admin)</td>
+                    <td>Role-based communications</td>
+                </tr>
+                <tr>
+                    <td><strong>Custom</strong></td>
+                    <td>Include or exclude specific sevak IDs</td>
+                    <td>Targeted messages to individuals or small groups</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h4>Exclude Field</h4>
+    <p>All targeting modes include an <strong>Exclude</strong> field. Use this to remove specific sevaks, departments, or roles from the recipient list. This is useful when you want to send to "everyone except a specific group."</p>
+
+    <h4>How to Send a Bulk Communication</h4>
+    <ol class="steps">
+        <li>Navigate to <strong>Sevak Directory</strong> and click the <strong>"Official Communication"</strong> button</li>
+        <li>Select the <strong>targeting mode</strong> (All, Department, Role, or Custom)</li>
+        <li>Configure recipients using the available filters</li>
+        <li>Optionally add entries to the <strong>Exclude</strong> field</li>
+        <li>Enter the <strong>Subject</strong> and compose your <strong>Message</strong></li>
+        <li>Click <strong>"Preview Recipients"</strong> to verify the recipient list before sending</li>
+        <li>Review the count and click <strong>"Send"</strong></li>
+        <li>An <strong>acknowledgement popup</strong> confirms the send with the total recipient count</li>
+    </ol>
+
+    <div class="info-box tip">
+        <strong>💡 Tip</strong>
+        Always preview recipients before sending to ensure you're communicating with the right audience. The acknowledgement popup provides a final confirmation with the exact recipient count.
+    </div>
+</section>
+
+<hr>
+
+<!-- 2.6 Week-Off Maintenance -->
+<section id="sec2-weekoff-maint">
+    <h3>2.6 Week-Off Maintenance (Settings)</h3>
+    <p>Access the Week-Off Maintenance feature from the Settings page to manage stale week-off swap requests.</p>
+
+    <h4>Auto-Cancel Stale Week-Off Swaps</h4>
+    <p>Over time, week-off swap requests may become stale — these are requests where the swap date has already passed but the request was never approved or rejected. The auto-cancel feature cleans up these stale requests.</p>
+
+    <ol class="steps">
+        <li>Navigate to <strong>Settings</strong> from the sidebar</li>
+        <li>Find the <strong>"Week-Off Maintenance"</strong> section</li>
+        <li>Click <strong>"Auto-Cancel Stale Week-Off Swaps"</strong></li>
+        <li>The system will identify and cancel all swap requests where the swap date has passed</li>
+        <li>A confirmation message shows how many requests were cancelled</li>
+    </ol>
+
+    <div class="info-box info">
+        <strong>ℹ️ Note</strong>
+        This action only affects swap requests where the requested swap date is in the past. Pending requests for future dates are not affected.
+    </div>
+</section>
+
+<hr>
+
+<!-- FAQ Section -->
+<div class="section-header" id="faq">
+    <div class="section-number">FAQ</div>
+    <h2>Frequently Asked Questions</h2>
+    <p>Common questions and answers specific to the HR role in VDS HRMS.</p>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">1. How do I change a sevak's default week-off day?</div>
+    <div class="faq-answer">Go to <strong>Sevak Directory</strong>, find the sevak, click <strong>Edit Profile</strong>, and modify the default week-off day. The change takes effect from the next scheduling cycle.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">2. How do I approve leave requests that are waiting for HOD?</div>
+    <div class="faq-answer">Go to <strong>Leave Admin → Pending Requests</strong> tab. Requests with <span class="badge badge-orange">PENDING</span> status need HOD action first — use the <strong>Notify HOD</strong> button to send a reminder. Requests with <span class="badge badge-green">HOD_APPROVED</span> status are ready for your action (Approve/Reject).</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">3. Can I modify a sevak's leave balance after onboarding?</div>
+    <div class="faq-answer">Only on the <strong>activation day</strong>, and only <strong>once</strong>. After that, balances follow the standard annual cycle. Plan any adjustments carefully during the initial onboarding period.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">4. How do I create a new department?</div>
+    <div class="faq-answer">Go to <strong>Departments → click "Add Department"</strong>. Enter the department name, assign an HOD (only SEVAK-role sevaks are eligible), and optionally assign office locations with interactive map support.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">5. How do I send a bulk email to all sevaks?</div>
+    <div class="faq-answer">Go to <strong>Sevak Directory → click "Official Communication"</strong> button. Select recipients using targeting modes (All, Department, Role, or Custom), compose your message, preview recipients, and send. An acknowledgement popup confirms the recipient count.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">6. Can I see attendance for all sevaks?</div>
+    <div class="faq-answer">Yes. Go to <strong>Attendance Reports</strong> for a comprehensive view with geo-validation flags, monthly compliance summaries, sevak-wise breakdowns, and CSV export. Use the month/year selector to choose the reporting period.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">7. How do I handle a delete request?</div>
+    <div class="faq-answer">In the <strong>Sevak Directory</strong>, find the INACTIVE sevak and click <strong>"Delete Request"</strong> from the actions menu. This flags the account for Admin/SuperAdmin review. If you change your mind, click <strong>"Withdraw Request"</strong> (same location) to cancel it. Note: activating an account automatically clears any pending delete request.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">8. What if HOD doesn't approve leaves for a long time?</div>
+    <div class="faq-answer">Use the <strong>"Notify HOD"</strong> button in <strong>Leave Admin → Pending Requests</strong> to send email reminders to the respective HOD. You can also contact the HOD directly through official channels. Persistent non-response should be escalated to administration.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">9. How do I change my own default week-off?</div>
+    <div class="faq-answer">Contact the <strong>Admin</strong> to modify your default week-off day. As HR, you cannot modify your own settings — this is a security measure to prevent unauthorized self-modification.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">10. My account is locked. What do I do?</div>
+    <div class="faq-answer">Contact the <strong>Admin</strong> to unlock your account and reset your password. Account locks typically occur after multiple failed login attempts. The Admin can unlock your account and set a new password for you.</div>
+</div>
+
+<div class="faq-item">
+    <div class="faq-question">11. What is Week-Off Maintenance?</div>
+    <div class="faq-answer">Go to <strong>Settings → Week-Off Maintenance</strong> and click <strong>"Run Now"</strong> to manually trigger the auto-cancel process. This cancels any pending leave requests that overlap with the upcoming week-off days for all sevaks. It is normally run automatically, but you can trigger it manually if needed.</div>
+</div>
+
+<hr>
+
+<!-- Need Help? -->
+<section id="help">
+    <div class="card card-highlight" style="text-align: center; padding: 40px;">
+        <h2 style="border: none; margin-top: 0; color: var(--primary-dark);">Need Help?</h2>
+        <p style="font-size: 1.05rem; max-width: 500px; margin: 10px auto 24px;">If you have questions, encounter issues, or need assistance with VDS HRMS, please reach out to the system administrator.</p>
+        <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+            <div class="feature-box" style="display: inline-flex; gap: 10px; margin: 0; padding: 14px 20px;">
+                <div class="feature-icon orange">📧</div>
+                <div style="text-align: left;">
+                    <h4 style="margin: 0; font-size: 0.9rem;">Email Admin</h4>
+                    <p style="margin: 0; font-size: 0.85rem;">Contact your system administrator for account issues, technical support, or feature requests.</p>
+                </div>
+            </div>
+        </div>
+        <p style="margin-top: 24px; font-size: 0.85rem; color: var(--text-muted);">
+            VDS HRMS &bull; Vaidic Dharma Sansthan &bull; Art of Living<br>
+            Version 1.0 &bull; July 2026
+        </p>
+    </div>
+</section>
+
+</div><!-- end main-content -->
+
+<!-- Scroll to Top Button -->
+<button class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top">↑</button>
+
+<script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    function toggleSidebar() {
+        sidebar.classList.toggle('collapsed');
+        const isCollapsed = sidebar.classList.contains('collapsed');
+        menuToggle.classList.toggle('active', !isCollapsed);
+        if (window.innerWidth <= 900) {
+            overlay.classList.toggle('active', !isCollapsed);
+        }
+    }
+
+    menuToggle.addEventListener('click', toggleSidebar);
+    overlay.addEventListener('click', toggleSidebar);
+
+    // Close sidebar when a link is clicked (mobile)
+    document.querySelectorAll('.sidebar nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 900) {
+                toggleSidebar();
+            }
+        });
+    });
+
+    // Scroll to top button
+    const scrollTopBtn = document.querySelector('.scroll-top');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollTopBtn.style.display = 'flex';
+        } else {
+            scrollTopBtn.style.display = 'none';
+        }
+    });
+    scrollTopBtn.style.display = 'none';
+</script>
+
+</body>
+</html>
